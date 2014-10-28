@@ -1,0 +1,125 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg"
+    tools:context=".MainActivity" >
+
+    <ImageView
+        android:id="@+id/image_pie_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#0000"
+        android:scaleType="fitCenter"
+        android:src="@drawable/pie_full"
+        android:visibility="visible" />   
+
+    <ImageButton
+        android:id="@+id/ib_pie1_4"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#0000"
+        android:scaleType="fitCenter"
+        android:src="@drawable/piesec1_4"
+        android:visibility="visible" 
+        />
+    
+    <ImageButton
+        android:id="@+id/ib_pie2_4"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#0000"
+        android:scaleType="fitCenter"
+        android:src="@drawable/piesec2_4"
+        android:visibility="visible" 
+        />
+    <ImageButton
+        android:id="@+id/ib_pie3_4"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#0000"
+        android:scaleType="fitCenter"
+        android:src="@drawable/piesec3_4"
+        android:visibility="visible" 
+        />
+    
+    <ImageButton
+        android:id="@+id/ib_pie4_4"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#0000"
+        android:scaleType="fitCenter"
+        android:src="@drawable/piesec4_4"
+        android:visibility="visible" 
+        />
+
+    <ImageButton
+        android:id="@+id/ib_pie5_4"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#0000"
+        android:scaleType="fitCenter"
+        android:src="@drawable/piesec5_4"
+        android:visibility="visible" 
+        />    
+    
+    <ImageButton
+        android:id="@+id/ib_pie6_4"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#0000"
+        android:scaleType="fitCenter"
+        android:src="@drawable/piesec6_4"
+        android:visibility="visible"
+        />
+
+    <ImageButton
+        android:id="@+id/ib_pie7_4"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#0000"
+        android:scaleType="fitCenter"
+        android:src="@drawable/piesec7_4"
+        android:visibility="visible"
+        />    
+    
+    <ImageButton
+        android:id="@+id/ib_pie8_4"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#0000"
+        android:scaleType="fitCenter"
+        android:src="@drawable/piesec8_4"
+        android:visibility="visible"
+        />
+    
+    <ImageButton
+        android:id="@+id/ib_pie_hs"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitCenter"
+        android:src="@drawable/pie_full_hs"
+        android:visibility="invisible" />
+
+    <ImageView
+        android:id="@+id/image_pie"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#0000"
+        android:scaleType="fitCenter"
+        android:src="@drawable/pie_full_frm"
+        android:visibility="visible" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <Button
+            android:id="@+id/submit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Submit" />
+
+    </LinearLayout>
+    
+</FrameLayout>
