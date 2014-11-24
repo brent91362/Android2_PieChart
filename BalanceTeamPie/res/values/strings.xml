@@ -4,5 +4,7 @@
     <string name="app_name">Balance Team Pie</string>
     <string name="action_settings">Settings</string>
     <string name="action_exit">Exit</string>
+    <string name="title_activity_project">ProjectActivity</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>
