@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,7 +25,7 @@ public class LoginActivity extends Activity {
     * TODO: remove after connecting to a real authentication system.
     */
    private static final String[] DUMMY_CREDENTIALS = new String[] {
-         "test:test" };
+         "foo@example.com:hello", "bar@example.com:world" };
 
    /**
     * The default email to populate the email field with.
@@ -38,13 +37,13 @@ public class LoginActivity extends Activity {
     */
    private UserLoginTask mAuthTask = null;
 
-   // Values for username and password at the time of the login attempt.
-   private String username;
-   private String password;
+   // Values for email and password at the time of the login attempt.
+   private String mEmail;
+   private String mPassword;
 
    // UI references.
-   private EditText userView;
-   private EditText passwordView;
+   private EditText mEmailView;
+   private EditText mPasswordView;
    private View mLoginFormView;
    private View mLoginStatusView;
    private TextView mLoginStatusMessageView;
@@ -54,15 +53,14 @@ public class LoginActivity extends Activity {
       super.onCreate(savedInstanceState);
 
       setContentView(R.layout.activity_login);
-      getActionBar().hide();
-      
+
       // Set up the login form.
-      username = getIntent().getStringExtra(EXTRA_EMAIL);
-      userView = (EditText) findViewById(R.id.username);
-      userView.setText(username);
-      
-      passwordView = (EditText) findViewById(R.id.password);
-      passwordView
+      mEmail = getIntent().getStringExtra(EXTRA_EMAIL);
+      mEmailView = (EditText) findViewById(R.id.username);
+      mEmailView.setText(mEmail);
+
+      mPasswordView = (EditText) findViewById(R.id.password);
+      mPasswordView
             .setOnEditorActionListener(new TextView.OnEditorActionListener() {
                @Override
                public boolean onEditorAction(TextView textView, int id,
@@ -106,33 +104,37 @@ public class LoginActivity extends Activity {
       }
       // TODO: check username errors
       // Reset errors.
-      userView.setError(null);
-      passwordView.setError(null);
+//      mEmailView.setError(null);
+      mPasswordView.setError(null);
 
       // Store values at the time of the login attempt.
-      username = userView.getText().toString();
-      password = passwordView.getText().toString();
+//      mEmail = mEmailView.getText().toString();
+      mPassword = mPasswordView.getText().toString();
 
       boolean cancel = false;
       View focusView = null;
 
-      // Check for a valid username.
-      if (TextUtils.isEmpty(username)) {
-         userView.setError(getString(R.string.error_field_required));
-         focusView = userView;
-         cancel = true;
-      }
-      
       // Check for a valid password.
-      if (TextUtils.isEmpty(password)) {
-         passwordView.setError(getString(R.string.error_field_required));
-         focusView = passwordView;
+      if (TextUtils.isEmpty(mPassword)) {
+         mPasswordView.setError(getString(R.string.error_field_required));
+         focusView = mPasswordView;
          cancel = true;
-      } else if (password.length() < 4) {
-         passwordView.setError(getString(R.string.error_invalid_password));
-         focusView = passwordView;
+      } else if (mPassword.length() < 4) {
+         mPasswordView.setError(getString(R.string.error_invalid_password));
+         focusView = mPasswordView;
          cancel = true;
       }
+
+      // Check for a valid username.
+//      if (TextUtils.isEmpty(mEmail)) {
+//         mEmailView.setError(getString(R.string.error_field_required));
+//         focusView = mEmailView;
+//         cancel = true;
+//      } else if (!mEmail.contains("@")) {
+//         mEmailView.setError(getString(R.string.error_invalid_email));
+//         focusView = mEmailView;
+//         cancel = true;
+//      }
 
       if (cancel) {
          // There was an error; don't attempt login and focus the first
@@ -205,9 +207,9 @@ public class LoginActivity extends Activity {
 
          for (String credential : DUMMY_CREDENTIALS) {
             String[] pieces = credential.split(":");
-            if (pieces[0].equals(username)) {
+            if (pieces[0].equals(mEmail)) {
                // Account exists, return true if the password matches.
-               return pieces[1].equals(password);
+               return pieces[1].equals(mPassword);
             }
          }
 
@@ -221,15 +223,11 @@ public class LoginActivity extends Activity {
          showProgress(false);
 
          if (success) {
-            // Go on to the next activity..
-            Intent intent = new Intent();
-            intent.setClass(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
-            LoginActivity.this.finish();
+            finish();
          } else {
-            passwordView
+            mPasswordView
                   .setError(getString(R.string.error_incorrect_password));
-            passwordView.requestFocus();
+            mPasswordView.requestFocus();
          }
       }
 
