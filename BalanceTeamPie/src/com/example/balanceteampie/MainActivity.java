@@ -123,7 +123,6 @@ public class MainActivity extends Activity implements AllPerson{
          secImgBtn[secId].setImageResource(pInfo[secId].getLv4Pic());
          break;
       default:
-         secImgBtn[secId].setVisibility(View.INVISIBLE);
          break;
       }
       secImgBtn[secId].setColorFilter(myColor,Mode.MULTIPLY);
