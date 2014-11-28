@@ -37,12 +37,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
-        <RelativeLayout
+        <LinearLayout
             style="@style/LoginFormContainer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="70dp"
-            android:gravity="center_vertical|center_horizontal"
             android:orientation="vertical" >
 
             <ImageView
@@ -50,60 +46,42 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_centerHorizontal="true"
                 android:src="@drawable/logo" />
 
-        	<RelativeLayout
-        	    android:id="@+id/r_layout2"
+            <EditText
+                android:id="@+id/username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:hint="@string/prompt_username"
+                android:inputType="text"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:hint="@string/prompt_password"
+                android:imeActionId="@+id/login"
+                android:imeActionLabel="@string/action_sign_in_short"
+                android:imeOptions="actionUnspecified"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <Button
+                android:id="@+id/sign_in_button"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/logo_image"
-                android:layout_alignLeft="@+id/logo_image"
-                android:layout_marginTop="17dp"
-                android:background="#FFFFFF" >
-                
-	            <EditText
-	                android:id="@+id/username"
-	                android:layout_width="match_parent"
-	                android:layout_height="wrap_content"
-	                android:layout_centerHorizontal="true"
-	                android:layout_gravity="center"
-	                android:background="?android:attr/editTextBackground"
-	                android:hint="@string/prompt_username"
-	                android:inputType="text"
-	                android:maxLines="1"
-	                android:singleLine="true" />
-	
-	            <EditText
-	                android:id="@+id/password"
-	                android:layout_width="match_parent"
-	                android:layout_height="wrap_content"
-	                android:layout_below="@+id/username"
-	                android:layout_gravity="center"
-	                android:background="?android:attr/editTextBackground"
-	                android:hint="@string/prompt_password"
-	                android:imeActionId="@+id/login"
-	                android:imeActionLabel="@string/action_sign_in_short"
-	                android:imeOptions="actionUnspecified"
-	                android:inputType="textPassword"
-	                android:maxLines="1"
-	                android:singleLine="true" />
-	
-	            <Button
-	                android:id="@+id/sign_in_button"
-	                android:layout_width="wrap_content"
-	                android:layout_height="wrap_content"
-	                android:layout_gravity="center"
-	                android:layout_below="@+id/password"
-	                android:layout_alignRight="@+id/password"
-	                android:layout_marginTop="16dp"
-	                android:paddingLeft="30dp"
-	                android:paddingRight="30dp"
-	                android:text="@string/action_sign_in_register" />
-            </RelativeLayout>
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp"
+                android:text="@string/action_sign_in_register" />
 
-        </RelativeLayout>
-
+        </LinearLayout>
     </ScrollView>
 
 </merge>
