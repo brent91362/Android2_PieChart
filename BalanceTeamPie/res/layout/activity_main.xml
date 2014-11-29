@@ -93,6 +93,7 @@
         android:visibility="visible"
         />
     
+    <!-- Pie image with hotspot colors -->
     <ImageButton
         android:id="@+id/ib_pie_hs"
         android:layout_width="match_parent"
@@ -101,6 +102,7 @@
         android:src="@drawable/pie_full_hs"
         android:visibility="invisible" />
 
+    <!-- Pie image with frame only -->
     <ImageView
         android:id="@+id/image_pie"
         android:layout_width="match_parent"
@@ -110,16 +112,112 @@
         android:src="@drawable/pie_full_frm"
         android:visibility="visible" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-
-        <Button
-            android:id="@+id/submit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Submit" />
-
-    </LinearLayout>
+	<!-- Skill name label for each pie section -->
+    <TextView
+        android:id="@+id/skill_name1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="110dp"
+        android:layout_marginLeft="170dp"
+        android:background="#99CCFF"
+        android:maxEms="5"
+        android:maxLines="2"
+        android:text="skill_name1" />
+    
+    <TextView
+        android:id="@+id/skill_name2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="170dp"
+        android:layout_marginLeft="220dp"
+        android:background="#99CCFF"
+        android:maxEms="5"
+        android:maxLines="2"
+        android:text="skill_name2" />
+    
+    <TextView
+        android:id="@+id/skill_name3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="250dp"
+        android:layout_marginLeft="220dp"
+        android:background="#99CCFF"
+        android:maxEms="5"
+        android:maxLines="2"
+        android:text="skill_name3" />
+    
+    <TextView
+        android:id="@+id/skill_name4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="330dp"
+        android:layout_marginLeft="170dp"
+        android:background="#99CCFF"
+        android:maxEms="5"
+        android:maxLines="2"
+        android:text="skill_name4" />
+    
+    <TextView
+        android:id="@+id/skill_name5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="330dp"
+        android:layout_marginLeft="70dp"
+        android:background="#99CCFF"
+        android:maxEms="5"
+        android:maxLines="2"
+        android:text="skill_name5" />
+    
+    <TextView
+        android:id="@+id/skill_name6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="250dp"
+        android:layout_marginLeft="25dp"
+        android:background="#99CCFF"
+        android:maxEms="5"
+        android:maxLines="2"
+        android:text="skill_name6" />
+    
+    <TextView
+        android:id="@+id/skill_name7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="170dp"
+        android:layout_marginLeft="25dp"
+        android:background="#99CCFF"
+        android:maxEms="5"
+        android:maxLines="2"
+        android:text="skill_name7" />
+    
+    <TextView
+        android:id="@+id/skill_name8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="110dp"
+        android:layout_marginLeft="70dp"
+        android:background="#99CCFF"
+        android:maxEms="5"
+        android:maxLines="2"
+        android:text="skill_name8" />
+    
+    <!-- Buttons to show/hide labels and submit skill levels -->
+    <Button
+        android:id="@+id/button_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_blue"
+        android:text="@string/button_text_save"
+        android:layout_gravity="bottom|right"
+        style="@style/button_text_style" />
+    
+    <Button
+        android:id="@+id/button_hide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_blue"
+        android:text="@string/button_text_hide"
+        android:layout_gravity="bottom|left"
+        style="@style/button_text_style" />
     
 </FrameLayout>

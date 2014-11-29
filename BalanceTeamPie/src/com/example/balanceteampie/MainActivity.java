@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff.Mode;
 import android.view.*;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.*;
 
@@ -21,15 +22,28 @@ public class MainActivity extends Activity implements AllPerson{
    static int myColor = Color.argb(150, 204, 0, 0); // Change color here
    static PieInfo pInfo[] = new PieInfo[MAX_SECTION];
    ImageButton secImgBtn[] = new ImageButton[MAX_SECTION];
+   TextView secTxtVw[] = new TextView[MAX_SECTION]; // Add by MinL 11272014
    
    ImageButton hotspotImgBtn;   
    ImageView pieImgView;
+   
+   String project; // Add by MinL 11272014
+   Button saveBtn; // Add by MinL 11272014
+   Button hideBtn; // Add by MinL 11272014
    
    @Override
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_main);
    
+      // Add by MinL 11272014 ->
+      //  Get the selected project name from previous project activity
+      project = getIntent().getStringExtra("SELECTED_PROJ");
+      setToast("You're now working on [" + project + "]");
+      
+      //  Then, get pie values from DB (if ever worked on)
+      // End of add  11272014 <-
+      
       setPieInfo();
       setImgBtn();
       
@@ -37,8 +51,56 @@ public class MainActivity extends Activity implements AllPerson{
       
       pieImgView = (ImageView) findViewById(R.id.image_pie);
       pieImgView.setOnTouchListener(hsTouchListener);
+      
+      // Add by MinL 11227014 ->
+      saveBtn = (Button) findViewById(R.id.button_save);
+      saveBtn.setOnClickListener(funcClickListener);     
+      
+      hideBtn = (Button) findViewById(R.id.button_hide);
+      hideBtn.setOnClickListener(funcClickListener);
+      
+      for (int i = 0; i < MAX_SECTION; i++)
+         secTxtVw[i] = (TextView) findViewById(R.id.skill_name1 + i);      
+      // End of add  11227014 <-
    }
    
+   /**
+    * Add by MinL 11272014
+    * ClickListener for Hide button and Save button
+    * Hide: Show/Hide the skill name labels
+    * Save: Send the pie values to DB
+    */
+   private final OnClickListener funcClickListener = new OnClickListener() {
+      public void onClick(View v) {
+         Button btn = (Button) v;
+         if (btn.getId() == R.id.button_save) {
+            //Save pie info to DB
+            int pieLevel[] = new int[MAX_SECTION];
+            for (int i = 0; i < pInfo.length; i++) {
+               pieLevel[i] = pInfo[i].getCountLevel();
+            }            
+            setToast("submit pieLevel[] to DB");
+         }
+         if (btn.getId() == R.id.button_hide) {
+            if (secTxtVw[0].getVisibility() == View.INVISIBLE) {
+               for (int i = 0; i < MAX_SECTION; i++) {
+                  btn.setText(R.string.button_text_hide);
+                  secTxtVw[i].setVisibility(View.VISIBLE);
+               }
+            }
+            else {
+               for (int i = 0; i < MAX_SECTION; i++) {
+                  btn.setText(R.string.button_text_show);
+                  secTxtVw[i].setVisibility(View.INVISIBLE);
+               }
+            }
+         }
+      }      
+   };
+   
+   /**
+    * Use the touched color to find out which section levels to be set
+    */
    private final OnTouchListener hsTouchListener = new OnTouchListener() {
       @Override
       public boolean onTouch(View v, MotionEvent event) {         
@@ -70,6 +132,13 @@ public class MainActivity extends Activity implements AllPerson{
       }      
    };
 
+   /**
+    * Use the touched position to find the color on the pie_full_hs.png image 
+    * @param hotspotId
+    * @param x
+    * @param y
+    * @return color code
+    */
    public int getHotspotColor (int hotspotId, int x, int y) {
       int t = 0;
       try {
