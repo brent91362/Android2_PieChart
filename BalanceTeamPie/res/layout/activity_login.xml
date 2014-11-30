@@ -40,8 +40,7 @@
         <RelativeLayout
             style="@style/LoginFormContainer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="70dp"
+            android:layout_height="match_parent"            
             android:gravity="center_vertical|center_horizontal"
             android:orientation="vertical" >
 
@@ -50,17 +49,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginTop="30dp"
                 android:layout_centerHorizontal="true"
                 android:src="@drawable/logo" />
 
         	<RelativeLayout
         	    android:id="@+id/r_layout2"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/logo_image"
-                android:layout_alignLeft="@+id/logo_image"
-                android:layout_marginTop="17dp"
-                android:background="#FFFFFF" >
+        	    android:layout_width="wrap_content"
+        	    android:layout_height="match_parent"
+        	    android:layout_alignLeft="@+id/logo_image"
+        	    android:layout_below="@+id/logo_image"
+        	    android:layout_marginTop="17dp" >
                 
 	            <EditText
 	                android:id="@+id/username"
@@ -68,40 +67,52 @@
 	                android:layout_height="wrap_content"
 	                android:layout_centerHorizontal="true"
 	                android:layout_gravity="center"
-	                android:background="?android:attr/editTextBackground"
 	                android:hint="@string/prompt_username"
 	                android:inputType="text"
 	                android:maxLines="1"
-	                android:singleLine="true" />
+	                android:singleLine="true"
+	                android:background="@drawable/edittext_top_bg"
+	                android:drawableLeft="@drawable/input_user" />
 	
 	            <EditText
 	                android:id="@+id/password"
 	                android:layout_width="match_parent"
 	                android:layout_height="wrap_content"
 	                android:layout_below="@+id/username"
+	                android:layout_marginBottom="10dp"
 	                android:layout_gravity="center"
-	                android:background="?android:attr/editTextBackground"
 	                android:hint="@string/prompt_password"
 	                android:imeActionId="@+id/login"
 	                android:imeActionLabel="@string/action_sign_in_short"
 	                android:imeOptions="actionUnspecified"
 	                android:inputType="textPassword"
 	                android:maxLines="1"
-	                android:singleLine="true" />
+	                android:singleLine="true"
+	                android:background="@drawable/edittext_bottom_bg"
+	                android:drawableLeft="@drawable/input_lock" />
 	
 	            <Button
 	                android:id="@+id/sign_in_button"
-	                android:layout_width="wrap_content"
+	                style="@style/button_text_style"
+	                android:layout_width="fill_parent"
 	                android:layout_height="wrap_content"
-	                android:layout_gravity="center"
 	                android:layout_below="@+id/password"
-	                android:layout_alignRight="@+id/password"
-	                android:layout_marginTop="16dp"
-	                android:paddingLeft="30dp"
-	                android:paddingRight="30dp"
-	                android:text="@string/action_sign_in_register" />
-            </RelativeLayout>
+	                android:layout_gravity="center"
+	                android:layout_marginTop="10dp"
+	                android:background="@drawable/button_blue"
+	                android:paddingLeft="20dp"
+	                android:paddingRight="20dp"
+	                android:text="@string/action_sign_in_short" />
 
+            </RelativeLayout>
+		
+		<!-- Link to Registration Screen -->
+        <TextView android:id="@+id/link_to_register"
+                android:layout_below="@+id/r_layout2"
+                android:layout_marginTop="60dp"
+                android:layout_marginBottom="10dp"
+                android:text="@string/register_new"
+                style="@style/link_text_style" />
         </RelativeLayout>
 
     </ScrollView>

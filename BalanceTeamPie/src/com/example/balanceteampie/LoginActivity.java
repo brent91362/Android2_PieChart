@@ -1,9 +1,13 @@
 package com.example.balanceteampie;
 
+import java.util.ArrayList;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -15,6 +19,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Activity which displays a login screen to the user, offering registration as
@@ -25,13 +30,7 @@ public class LoginActivity extends Activity {
     * A dummy authentication store containing known user names and passwords.
     * TODO: remove after connecting to a real authentication system.
     */
-   private static final String[] DUMMY_CREDENTIALS = new String[] {
-         "test:test" };
-
-   /**
-    * The default email to populate the email field with.
-    */
-   public static final String EXTRA_EMAIL = "com.example.android.authenticatordemo.extra.EMAIL";
+   private static ArrayList<String> dummyCredentials = new ArrayList<String>();
 
    /**
     * Keep track of the login task to ensure we can cancel it if requested.
@@ -41,6 +40,8 @@ public class LoginActivity extends Activity {
    // Values for username and password at the time of the login attempt.
    private String username;
    private String password;
+   
+   private final int MIN_STRING_LENGTH = 4;
 
    // UI references.
    private EditText userView;
@@ -56,8 +57,10 @@ public class LoginActivity extends Activity {
       setContentView(R.layout.activity_login);
       getActionBar().hide();
       
+      // TODO: Remove later
+      dummyCredentials.add("test:test");
+      
       // Set up the login form.
-      username = getIntent().getStringExtra(EXTRA_EMAIL);
       userView = (EditText) findViewById(R.id.username);
       userView.setText(username);
       
@@ -80,12 +83,22 @@ public class LoginActivity extends Activity {
       mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
 
       findViewById(R.id.sign_in_button).setOnClickListener(
-            new View.OnClickListener() {
-               @Override
-               public void onClick(View view) {
-                  attemptLogin();
-               }
-            });
+         new View.OnClickListener() {
+            public void onClick(View view) {
+               attemptLogin();
+            }
+      });
+      
+      // Add by MinL 11292014 ->
+      findViewById(R.id.link_to_register).setOnClickListener(
+         new View.OnClickListener() {
+            public void onClick(View view) {
+               // go to Registration Page
+               Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
+               startActivity(i);
+            }               
+      });
+      // End of add 11292014 <-
    }
 
    @Override
@@ -104,7 +117,6 @@ public class LoginActivity extends Activity {
       if (mAuthTask != null) {
          return;
       }
-      // TODO: check username errors
       // Reset errors.
       userView.setError(null);
       passwordView.setError(null);
@@ -128,7 +140,7 @@ public class LoginActivity extends Activity {
          passwordView.setError(getString(R.string.error_field_required));
          focusView = passwordView;
          cancel = true;
-      } else if (password.length() < 4) {
+      } else if (password.length() < MIN_STRING_LENGTH) {
          passwordView.setError(getString(R.string.error_invalid_password));
          focusView = passwordView;
          cancel = true;
@@ -192,7 +204,6 @@ public class LoginActivity extends Activity {
     * the user.
     */
    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-      @Override
       protected Boolean doInBackground(Void... params) {
          // TODO: attempt authentication against a network service.
 
@@ -203,7 +214,8 @@ public class LoginActivity extends Activity {
             return false;
          }
 
-         for (String credential : DUMMY_CREDENTIALS) {
+         // TODO: check from DB account info
+         for (String credential : dummyCredentials) {
             String[] pieces = credential.split(":");
             if (pieces[0].equals(username)) {
                // Account exists, return true if the password matches.
@@ -211,19 +223,19 @@ public class LoginActivity extends Activity {
             }
          }
 
-         // TODO: register the new account here.
-         return true;
+         // No account info is found.
+         return false;
       }
 
-      @Override
       protected void onPostExecute(final Boolean success) {
          mAuthTask = null;
          showProgress(false);
-
+         
          if (success) {
-            // Go on to the next activity..
+            // Go on to the next activity
             Intent intent = new Intent();
             intent.setClass(LoginActivity.this, ProjectActivity.class);
+            intent.putExtra("USER_NAME", username);
             startActivity(intent);
             LoginActivity.this.finish();
          } else {
