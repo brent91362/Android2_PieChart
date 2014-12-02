@@ -19,6 +19,12 @@ public class PieInfo {
       hotspotColor = hs;
    }
    
+   PieInfo(int rId, int lv1) {
+	      resId = rId;
+	      lv1Pic = lv1;
+	      countLevel = 0;
+	   }
+   
    public void setCountLevel() { countLevel++; }
    public void resetLevel() { countLevel = 0; }
    public int getCountLevel() { return countLevel; }
