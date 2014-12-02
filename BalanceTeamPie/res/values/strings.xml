@@ -14,31 +14,35 @@
     <string name="register_fname">First Name</string>
     <string name="register_lname">Last Name</string>
     <string name="register_email">E-mail</string>
-    
-	<style name="button_text_style">
-       <item name="android:layout_width">fill_parent</item>
+
+    <style name="button_text_style">
+        <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">#ffffff</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_margin">3dp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">20sp</item>        
+        <item name="android:textSize">20sp</item>
         <item name="android:shadowColor">#000000</item>
         <item name="android:shadowDx">1</item>
         <item name="android:shadowDy">1</item>
         <item name="android:shadowRadius">2</item>
     </style>
-    
-	<style name="link_text_style">
-       <item name="android:layout_width">fill_parent</item>
+
+    <style name="link_text_style">
+        <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">#ffffff</item>
         <item name="android:gravity">center</item>
         <item name="android:textSize">14sp</item>
-        <item name="android:typeface">serif</item>        
+        <item name="android:typeface">serif</item>
         <item name="android:shadowColor">#000000</item>
         <item name="android:shadowDx">1</item>
         <item name="android:shadowDy">1</item>
         <item name="android:shadowRadius">2</item>
     </style>
+
+    <string name="title_activity_manager">Manager</string>
+    <string name="hello_world">Hello world!</string>
+
 </resources>

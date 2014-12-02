@@ -16,7 +16,9 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -99,6 +101,16 @@ public class LoginActivity extends Activity {
             }               
       });
       // End of add 11292014 <-
+      
+      
+      Button btnManager = (Button) findViewById(R.id.btnManager);
+      btnManager.setOnClickListener(new OnClickListener(){
+    	  public void onClick(View v) {
+    		  Intent intent = new Intent(v.getContext(), Manager.class);
+    		  startActivityForResult(intent, 0);
+    	  }
+      });
+      
    }
 
    @Override
