@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 public class Database {
@@ -35,60 +36,6 @@ public class Database {
 			else{
 				//show error
 			}
-		}
-		/*
-		 * gets the values from piename and user
-		 * return as int[]
-		 */
-
-		public String[] getPieValues(String username, String piename){
-			String value = null;
-		    String[] pievals=new String[8];
-			try{
-				URL url = new URL("http://btpie.ddns.net/dbfuncts.php?action=getuserpie&user="+username);
-				URLConnection conn = url.openConnection();
-			    conn.setDoOutput(true);
-			    String line, holder = null;
-			    BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-			    while ((line = reader.readLine()) != null) {
-			      holder=line;
-			    }
-			    //parses the string to get the values as a string
-			    //if there is more the one pie with same piename
-			    //will return the first one's values
-			    StringTokenizer st= new StringTokenizer(holder,"}");
-			    boolean found=false;
-			    while(st.hasMoreTokens()&&!found){
-			    	String tempp=st.nextToken();
-			    	StringTokenizer st2= new StringTokenizer(tempp,"\":");
-			    	while(st2.hasMoreTokens()){
-			    		String temp = st2.nextToken();
-			    		if(temp.contains("pc_name")){
-			    			String temp2 = st2.nextToken();
-			    			if(temp2.equals(piename)){
-			    				found=true;
-			    				value=st2.nextToken();
-			    				StringTokenizer st3= new StringTokenizer(value,"~");
-						    	st3.nextToken();
-						    	value=st3.nextToken();
-						    	StringTokenizer st4= new StringTokenizer(value,", ");
-						    	int i=0;
-						    	while(st4.hasMoreTokens()){
-						    		pievals[i]=st4.nextToken();
-						    		i++;
-						    	}
-						    	return pievals;
-			    			}
-			    		}
-			    	}
-			    	
-			    }
-			    reader.close();
-			    }
-			catch(Exception e){
-				
-			}
-			return pievals;
 		}
 
 		/*
@@ -160,20 +107,36 @@ public class Database {
 		/*
 		 * Trying to get to retreive all
 		 */
-		public String[] getTeamPie(int TeamID){
-			String[] names=null;
+		public ArrayList<int[]> getTeamPieValues(int i){
+			ArrayList<int[]> names=new ArrayList<int[]>();
 			try {
-				URL url = new URL("http://btpie.ddns.net/dbfuncts.php?action=getteampie&team_id=team_id"+TeamID);
+				URL url = new URL("http://btpie.ddns.net/dbfuncts.php?action=getteampie&team_id="+i);
 				URLConnection conn = url.openConnection();
 			    conn.setDoOutput(true);
-			    String line;
-			    BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+				String line, holder = null;
+				BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 			    while ((line = reader.readLine()) != null) {
-			      System.out.println(line);
+			      holder=line;System.out.println(holder);
+			    }
+			    //parses the string to get the names in team
+			    StringTokenizer st= new StringTokenizer(holder,"}");
+			    boolean found=false;
+			    while(st.hasMoreTokens()&&!found){
+			    	String tempp=st.nextToken();
+			    	StringTokenizer st2= new StringTokenizer(tempp,"{,\":");
+			    	while(st2.hasMoreTokens()){
+			    		if(st2.nextToken().equals("pc_value")){
+			    			int [] temp = toIntArray(st2.nextToken());
+			    			names.add(temp);
+			    		}
+			    	}
+			    	
 			    }
 			    reader.close();
+			    }
+			catch (IOException e) {
+				e.printStackTrace();
 			}
-		    catch(Exception e){}
 		    return names;
 		}
 		
@@ -294,7 +257,87 @@ public class Database {
 			}
 			return name;
 		}
-
+		/*
+		 * gets all users in team
+		 */
+		public ArrayList<String> getTeam(int i){
+			ArrayList<String> names=new ArrayList<String>();
+			try {
+				URL url = new URL("http://btpie.ddns.net/dbfuncts.php?action=getteam&team_id="+i);
+				URLConnection conn = url.openConnection();
+			    conn.setDoOutput(true);
+				String line, holder = null;
+				BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			    while ((line = reader.readLine()) != null) {
+			      holder=line;System.out.println(holder);
+			    }
+			    //parses the string to get the names in team
+			    StringTokenizer st= new StringTokenizer(holder,"}");
+			    boolean found=false;
+			    while(st.hasMoreTokens()&&!found){
+			    	String tempp=st.nextToken();
+			    	StringTokenizer st2= new StringTokenizer(tempp,"{,\":");
+			    	while(st2.hasMoreTokens()){
+			    		if(st2.nextToken().equals("ua_username")){
+			    			names.add(st2.nextToken());
+			    		}
+			    	}
+			    	
+			    }
+			    reader.close();
+			    }
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+		    return names;
+		}
+		/*
+		 * gets all teams in database
+		 */
+		public int[] getTeamPieValues(String username, String piename){
+			String value = null;
+		    int[] pievals=new int[8];
+			try{
+				URL url = new URL("http://btpie.ddns.net/dbfuncts.php?action=getuserpie&user="+username);
+				URLConnection conn = url.openConnection();
+			    conn.setDoOutput(true);
+			    String line, holder = null;
+			    BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			    while ((line = reader.readLine()) != null) {
+			      holder=line;
+			      System.out.println(holder);
+			    }
+			    //parses the string to get the values as a string
+			    //if there is more the one pie with same piename
+			    //will return the first one's values
+			    StringTokenizer st= new StringTokenizer(holder,"}");
+			    boolean found=false;
+			    while(st.hasMoreTokens()&&!found){
+			    	String tempp=st.nextToken();
+			    	StringTokenizer st2= new StringTokenizer(tempp,"\":");
+			    	while(st2.hasMoreTokens()){
+			    		String temp = st2.nextToken();
+			    		if(temp.equals("pie_chart_id")){
+			    			String temp2 = st2.nextToken();
+			    			if(temp2.equals(piename)){
+			    				found=true;
+			    			}
+			    		}
+			    		if(temp.equals("pc_value")){
+			    			String temp2 = st2.nextToken();
+			    			value=temp2;
+			    			return toIntArray(value);
+			    		}
+			    	}
+			    	
+			    }
+			    reader.close();
+			    }
+			catch(Exception e){
+				
+			}
+			return pievals;
+		}
 		public String getAllTeams(){
 			String output=null;
 			try {
@@ -311,5 +354,18 @@ public class Database {
 				e.printStackTrace();
 			}
 			return output;
+		}
+		/*
+		 * Convert a string to int[]
+		 * based on position of number
+		 */
+		public int[] toIntArray(String value){
+			int[] pievals=new int[8];
+			if(!value.equals(null)){
+				for(int i =0; i<pievals.length-1;i++){
+					pievals[i]=value.charAt(i)-'0';
+				}
+			}
+			return pievals;
 		}
 }
