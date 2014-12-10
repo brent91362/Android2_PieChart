@@ -139,7 +139,21 @@ public class Database {
 			}
 		    return names;
 		}
-		
+		/*
+		 * Change user's team, thus that the team pie
+		 */
+		public void changeTeam(String userID, int teamId){
+			try{
+				URL url = new URL("http://btpie.ddns.net/dbfuncts.php?action"
+						+ "=updateuser&user="+userID+"&team_id="+teamId);
+				URLConnection conn = url.openConnection();
+			    conn.setDoOutput(true);
+			    conn.getInputStream();
+			    }
+			catch(Exception e){
+				
+			}
+		}
 		public void updatePassword(String userID, String password){
 			try{
 				URL url = new URL("http://btpie.ddns.net/dbfuncts.php?action"
