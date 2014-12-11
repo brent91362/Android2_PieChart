@@ -469,4 +469,125 @@ public class Database {
 		    catch(Exception e){}
 		    return null;
 		}
+		/*
+		 * leader of user creates team
+		 */
+		public void createTeam(String username, String TeamName){
+			try{
+				URL url = new URL("btpie.ddns.net/dbfuncts.php?action=createteam"
+						+ "&team_leader="+username+"&team_name="+TeamName);
+				URLConnection conn = url.openConnection();
+				conn.getInputStream();
+			}
+			catch(Exception e){
+				
+			}
+		}
+		
+		public String[] getLeaderAttributes(String user){
+			String teamid = null, leaderid=null;
+			try{
+				URL url = new URL("http://btpie.ddns.net/dbfuncts.php?action=getuser&user="+user);
+				URLConnection conn = url.openConnection();
+			    conn.setDoOutput(true);
+			    String line,holder = null;
+			    BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			    while ((line = reader.readLine()) != null) {
+			      holder=(line);
+			    }
+			    reader.close();
+			    StringTokenizer st= new StringTokenizer(holder,"}\":");
+			    String name=null;
+			    while(st.hasMoreTokens()){
+			    	String temp=st.nextToken();
+			    	if(temp.equals("team_id")){
+		    			teamid= st.nextToken();
+			    	}
+			    	if(temp.equals("team_leader_id")){
+			    		leaderid= st.nextToken();
+			    		name=getLeaderName(teamid, leaderid);
+			    		System.out.println(teamid+leaderid+name);
+			    		return getPieAttributes(name, getUserPieName(name));
+			    	}
+			    }
+			}
+		    catch(Exception e){}
+			return null;
+		}
+		public String getLeaderName(String i,String leaderid){
+			if(i.equals(null)){
+				return null;
+			}
+			try {
+				URL url = new URL("http://btpie.ddns.net/dbfuncts.php?action=getteam&team_id="+i);
+				URLConnection conn = url.openConnection();
+			    conn.setDoOutput(true);
+				String line, holder = null;
+				BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			    while ((line = reader.readLine()) != null) {
+			    	holder=line;
+	  				System.out.println(line);
+			    }
+			    reader.close();
+			    //parses the string to get the names in team
+			    StringTokenizer st= new StringTokenizer(holder,"[]{}\":,");
+			    while(st.hasMoreTokens()){
+		    		if(st.nextToken().equals("user_account_id")){
+		    			if(st.nextToken().equals(i)){
+		    				while(true){
+		    					if(st.nextToken().equals("ua_username")){
+		    						return st.nextToken();
+		    					}
+		    					if(st.nextToken().equals("ua_password")){
+		    						break;
+		    					}
+		    				}
+		    			}
+		    		}
+			    	
+			    }
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+		    return null;
+		}
+		public void SetAttributes(String[] attributes, String username){
+			String x="";
+			x+=getUserPieName(username)+"~";
+			for(String a:attributes){
+				x+=a+",";
+			}
+			try {
+				URL url = new URL("http://btpie.ddns.net/dbfuncts.php?action=updateuserpie&pie_id="
+						+getUserPieId(username)+"&pie_name="+x);
+				URLConnection conn = url.openConnection();
+				conn.setDoOutput(true);
+			    conn.getInputStream();
+			}
+		    catch(Exception e){}
+		}
+		public String getUserPieId(String username){
+			String name=null;
+			try {
+				URL url = new URL("http://btpie.ddns.net/dbfuncts.php?action=getuserpie&user="+username);
+				URLConnection conn = url.openConnection();
+			    conn.setDoOutput(true);
+			    String line;
+			    BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			    while ((line = reader.readLine()) != null) {
+			      name=line;
+			    }
+			    reader.close();
+			    StringTokenizer st= new StringTokenizer(name,"[]{}\",:");
+			    while(st.hasMoreTokens()){
+			    	if(st.nextToken().contains("pie_chart_id")){
+			    		return st.nextToken();
+			    	}
+			    }
+			}
+		    catch(Exception e){}
+		    return null;
+		}
+		
 }
