@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
@@ -37,7 +38,6 @@ public class Database {
 				//show error
 			}
 		}
-
 		/*
 		 * creates a new user
 		 * Needs username and password, Team is important as well
@@ -47,8 +47,22 @@ public class Database {
 			if(!username.equals(null)&&!password.equals(null)){
 				try{
 					URL url = new URL("http://btpie.ddns.net/dbfuncts.php?action=createuser"
-							+ "&user="+username+"&pword="+password+"&fname="+first+"&lname="+last
+							+ "&user="+username+"&pword="+MD5(password)+"&fname="+first+"&lname="+last
 							+"&email="+email+"&team_id="+Team);
+					URLConnection conn = url.openConnection();
+					conn.getInputStream();
+				}
+				catch(Exception e){
+					
+				}
+			}
+		}
+		public void createUser(String username, String password, String first, String last, String email){
+			if(!username.equals(null)&&!password.equals(null)){
+				try{
+					URL url = new URL("http://btpie.ddns.net/dbfuncts.php?action=createuser"
+							+ "&user="+username+"&pword="+MD5(password)+"&fname="+first+"&lname="+last
+							+"&email="+email);
 					URLConnection conn = url.openConnection();
 					conn.getInputStream();
 				}
@@ -157,7 +171,7 @@ public class Database {
 		public void updatePassword(String userID, String password){
 			try{
 				URL url = new URL("http://btpie.ddns.net/dbfuncts.php?action"
-						+ "=updateuser&user="+userID+"&pword="+password);
+						+ "=updateuser&user="+userID+"&pword="+MD5(password));
 				URLConnection conn = url.openConnection();
 			    conn.setDoOutput(true);
 			    conn.getInputStream();
@@ -204,7 +218,7 @@ public class Database {
 		 */
 		public String[] getPieAttributes(String username, String piename){
 			String value = null;
-		    String[] pievals=new String[8];
+		    String[] pieAttributes=new String[8];
 			try{
 				URL url = new URL("http://btpie.ddns.net/dbfuncts.php?action=getuserpie&user="+username);
 				URLConnection conn = url.openConnection();
@@ -234,10 +248,10 @@ public class Database {
 						    	StringTokenizer st4= new StringTokenizer(value,", ");
 						    	int i=0;
 						    	while(st4.hasMoreTokens()){
-						    		pievals[i]=st4.nextToken();
+						    		pieAttributes[i]=st4.nextToken();
 						    		i++;
 						    	}
-						    	return pievals;
+						    	return pieAttributes;
 			    			}
 			    		}
 			    	}
@@ -248,7 +262,7 @@ public class Database {
 			catch(Exception e){
 				
 			}
-			return pievals;
+			return pieAttributes;
 		}
 		//gets all team info: leader, ids, etc
 		public int getTeamName(String teamName){
@@ -381,5 +395,78 @@ public class Database {
 				}
 			}
 			return pievals;
+		}
+		/*
+		 * encrypts using MD5 per server team request
+		 */
+		public static String MD5(String pass){
+		    try{
+		    	MessageDigest md;
+		        md = MessageDigest.getInstance("MD5");
+		        byte[] passBytes = pass.getBytes();
+		        md.reset();
+		        byte[] digested = md.digest(passBytes);
+		        StringBuffer sb = new StringBuffer();
+		        for(int i=0;i<digested.length;i++){
+		            sb.append(Integer.toHexString(0xff & digested[i]));
+		        }
+		        return sb.toString();
+		    }
+		    catch (Exception ex) {}
+		    return null;
+		  }
+		/*
+		 * gets user team id
+		 */
+		public String getUserTeamID(String userID) {
+			try {
+				URL url = new URL(
+						"http://btpie.ddns.net/dbfuncts.php?action=getuser&user="
+								+ userID);
+				URLConnection conn = url.openConnection();
+				conn.setDoOutput(true);
+				String line, holder = null;
+				BufferedReader reader = new BufferedReader(new InputStreamReader(
+						conn.getInputStream()));
+				while ((line = reader.readLine()) != null) {
+					holder = (line);
+				}
+				reader.close();
+				StringTokenizer st = new StringTokenizer(holder, "}\":");
+				boolean found = false;
+				while (st.hasMoreTokens() && !found) {
+					String temp = st.nextToken();
+					if (temp.equals("team_id")) {
+						return st.nextToken();
+					}
+				}
+			} catch (Exception e) {
+			}
+			return null;
+		}
+		/*
+		 * returns get's the users pie name as string
+		 */
+		public String getUserPieName(String username){
+			String name=null;
+			try {
+				URL url = new URL("http://btpie.ddns.net/dbfuncts.php?action=getuserpie&user="+username);
+				URLConnection conn = url.openConnection();
+			    conn.setDoOutput(true);
+			    String line;
+			    BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			    while ((line = reader.readLine()) != null) {
+			      name=line;
+			    }
+			    reader.close();
+			    StringTokenizer st= new StringTokenizer(name,"[]{}\",:");
+			    while(st.hasMoreTokens()){
+			    	if(st.nextToken().contains("pc_name")){
+			    		return st.nextToken();
+			    	}
+			    }
+			}
+		    catch(Exception e){}
+		    return null;
 		}
 }
