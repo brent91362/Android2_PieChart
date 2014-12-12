@@ -44,5 +44,7 @@
 
     <string name="title_activity_manager">Manager</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_main_menu">MainMenu</string>
+    <string name="title_activity_create_menu">CreateMenu</string>
 
 </resources>

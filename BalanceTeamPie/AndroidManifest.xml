@@ -42,6 +42,14 @@
             android:name=".Manager"
             android:label="@string/title_activity_manager" >
         </activity>
+        <activity
+            android:name=".MainMenu"
+            android:label="@string/title_activity_main_menu" >
+        </activity>
+        <activity
+            android:name=".CreateMenu"
+            android:label="@string/title_activity_create_menu" >
+        </activity>
     </application>
 
 </manifest>

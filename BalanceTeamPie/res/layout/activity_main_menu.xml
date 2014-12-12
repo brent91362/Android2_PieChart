@@ -1,0 +1,33 @@
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/TableLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg"
+    tools:context=".MainActivity" >
+
+    <Button
+        android:id="@+id/createTeam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create Team" />
+
+    <Button
+        android:id="@+id/selectTeam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Team" />
+
+    <Button
+        android:id="@+id/manageTeam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Manage Team" />
+
+    <Button
+        android:id="@+id/joinTeam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Join Team" />
+
+</TableLayout>
