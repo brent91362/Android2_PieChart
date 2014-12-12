@@ -113,15 +113,6 @@
                 android:layout_marginBottom="10dp"
                 android:text="@string/register_new"
                 style="@style/link_text_style" />
-
-        <Button
-            android:id="@+id/btnManager"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/r_layout2"
-            android:layout_centerHorizontal="true"
-            android:text="Manger" />
-
         </RelativeLayout>
 
     </ScrollView>

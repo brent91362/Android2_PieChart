@@ -201,9 +201,6 @@
         android:maxLines="2"
         android:text="skill_name8" />
     
-    
-
-    
     <!-- Buttons to show/hide labels and submit skill levels -->
     <Button
         android:id="@+id/button_save"

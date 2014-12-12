@@ -1,5 +1,7 @@
 package com.example.balanceteampie;
 
+import java.util.StringTokenizer;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Context;
@@ -27,22 +29,40 @@ public class MainActivity extends Activity implements AllPerson{
    ImageButton hotspotImgBtn;   
    ImageView pieImgView;
    
-   String project; // Add by MinL 11272014
    Button saveBtn; // Add by MinL 11272014
    Button hideBtn; // Add by MinL 11272014
+   
+   User myUser; // Add by MinL 12112014
    
    @Override
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_main);
    
-      // Add by MinL 11272014 ->
-      //  Get the selected project name from previous project activity
-      project = getIntent().getStringExtra("SELECTED_PROJ");
-      setToast("You're now working on [" + project + "]");
+      // Add by MinL 12112014 ->
+      //  Get the selected project name from previous menu activity
+      myUser = (User) getIntent().getParcelableExtra("USER_INFO");
       
       //  Then, get pie values from DB (if ever worked on)
-      // End of add  11272014 <-
+      String[] sn = new String[8];
+      int[] sl = new int[8];
+      int ind = 0;
+      Database db = new Database();
+      String pieName = db.getUserPieName(myUser.getUsername());
+      if (pieName != null) {
+         StringTokenizer st = new StringTokenizer(pieName, "~");
+         while (st.hasMoreTokens()) {
+            if (st.nextToken().equals("six")) {
+               sn = new String[6];
+               sl = new int[6];
+            }
+            if(ind < sn.length)
+               sn[ind] = st.nextToken();
+            ind++;
+         }
+         myUser.setSkillNames(sn);         
+      }
+      // End of add  12112014 <-
       
       setPieInfo();
       setImgBtn();
@@ -62,6 +82,9 @@ public class MainActivity extends Activity implements AllPerson{
       for (int i = 0; i < MAX_SECTION; i++)
          secTxtVw[i] = (TextView) findViewById(R.id.skill_name1 + i);      
       // End of add  11227014 <-
+      
+      if (sn != null) 
+         setSkillNames(sn);
    }
    
    /**
@@ -167,6 +190,16 @@ public class MainActivity extends Activity implements AllPerson{
          return false;
    }
    
+   /**
+    * Add By MinL 12112014
+    * @param sn
+    */
+   public void setSkillNames(String [] sn) {
+      for(int i = 0; i < sn.length; i++) {
+         secTxtVw[i].setText(sn[i]);
+      }
+   }
+   
    public void setLevel(int secId) {
       // increment level
       pInfo[secId].setCountLevel();
@@ -177,6 +210,8 @@ public class MainActivity extends Activity implements AllPerson{
       
       setToast("Section: " + (secId + 1) + "\n" 
                + "Skill Level: " + pInfo[secId].getCountLevel());
+      
+      secImgBtn[secId].setVisibility(View.VISIBLE); // fixed by MinL 12112014
       
       switch(pInfo[secId].getCountLevel()) {
       case 1:

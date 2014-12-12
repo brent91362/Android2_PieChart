@@ -6,18 +6,25 @@
  */
 package com.example.balanceteampie;
 
+import com.example.balanceteampie.LoginActivity.UserLoginTask;
+
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
 import android.util.Patterns;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.text.TextUtils;
 
 public class RegisterActivity extends Activity implements OnClickListener{
    private final int MIN_STRING_LENGTH = 4;
-   User newUser;
+   String username, password, fname, lname, email;
+   Database db = new Database();
+   private UserLoginTask mAuthTask = null;
    
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
@@ -50,12 +57,13 @@ public class RegisterActivity extends Activity implements OnClickListener{
          boolean cancel = false;
          View focusView = null;
          
-         String username, password, fname, lname, email;
-         username = userView.getText().toString();
+         username = userView.getText().toString().toLowerCase();
          password = passView.getText().toString();
          fname = fnameView.getText().toString();
          lname = lnameView.getText().toString();
          email = emailView.getText().toString();
+         
+         
          
          // Validate all the input fields...
          if (TextUtils.isEmpty(username)) {
@@ -64,6 +72,10 @@ public class RegisterActivity extends Activity implements OnClickListener{
             focusView = userView;
          } else if (username.length() < MIN_STRING_LENGTH) {
             userView.setError(getString(R.string.error_invalid_username));
+            cancel = true;
+            focusView = userView;
+         } else if (db.getUser(username) != null) {
+            userView.setError(getString(R.string.error_duplicate_username));
             cancel = true;
             focusView = userView;
          }
@@ -103,15 +115,39 @@ public class RegisterActivity extends Activity implements OnClickListener{
          if (cancel) {
             focusView.requestFocus();
          } else {
-            newUser = new User(username, password, fname, lname, email);
-            // Send to DB
-            finish();
+//            db.createUser(username, password, fname, lname, email);
+//            String s = "User has been successfully created.";
+//            Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
+//            finish();
+            mAuthTask = new UserLoginTask();
+            mAuthTask.execute((Void) null);
          }         
       }
       if (v.getId() == R.id.link_to_login)
          finish();
    }
+   
+   public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+      protected Boolean doInBackground(Void... params) {
+         db.createUser(username, password, fname, lname, email);
+         String s = "User has been successfully created.";
+         Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
+         finish();
+         return true;
+      }
 
+      protected void onPostExecute(final Boolean success) {
+         if(success) {
+            
+         }
+      }
+
+      @Override
+      protected void onCancelled() {
+         
+      }
+   }
+   
    @Override
    public boolean onCreateOptionsMenu(Menu menu) {
       // Inflate the menu; this adds items to the action bar if it is present.

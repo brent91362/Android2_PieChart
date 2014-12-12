@@ -51,11 +51,11 @@ public class ProjectActivity extends Activity {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				Intent intent = new Intent();
-	            intent.setClass(ProjectActivity.this, MainActivity.class);
+			   intent.setClass(ProjectActivity.this, MainActivity.class);
 	            
-	            //TODO Pass data to MainActivity for pie creation
+			   //TODO Pass data to MainActivity for pie creation
 	            
-	            startActivity(intent);	
+			   startActivity(intent);	
 			}
 		});
 	

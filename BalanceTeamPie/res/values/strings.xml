@@ -14,6 +14,11 @@
     <string name="register_fname">First Name</string>
     <string name="register_lname">Last Name</string>
     <string name="register_email">E-mail</string>
+    <string name="title_activity_main_menu">Main Menu</string>
+    <string name="menu_create_team">Create Team</string>
+    <string name="menu_select_team">Select Team</string>
+    <string name="menu_manage_team">Manage Team</string>
+    <string name="menu_join_team">Join Team</string>
 
     <style name="button_text_style">
         <item name="android:layout_width">fill_parent</item>
@@ -42,7 +47,52 @@
         <item name="android:shadowRadius">2</item>
     </style>
 
+    <style name="label_text_style">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingTop">20dp</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:shadowColor">#000000</item>
+        <item name="android:shadowDx">1</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:shadowRadius">2</item>
+    </style>
+
+    <!-- Menu -->
+    <string name="title_activity_menu">Main Menu</string>
+    <string name="title_fragment_create">Create Team</string>
+    <string name="title_fragment_select">Select Team</string>
+    <string name="title_fragment_manage">Manage Team</string>
+    <string name="title_fragment_join">Join Team</string>
+
+    <!-- Create Team/Project -->
+    <string name="hint_proj_name">Project Name</string>
+    <string name="hint_skill_name1">Skill Name #1</string>
+    <string name="hint_skill_name2">Skill Name #2</string>
+    <string name="hint_skill_name3">Skill Name #3</string>
+    <string name="hint_skill_name4">Skill Name #4</string>
+    <string name="hint_skill_name5">Skill Name #5</string>
+    <string name="hint_skill_name6">Skill Name #6</string>
+    <string name="hint_skill_name7">Skill Name #7</string>
+    <string name="hint_skill_name8">Skill Name #8</string>
+
+    <!-- Join Team -->
+    <string name="hint_team_id">Team ID</string>
+    <string name="title_activity_test">TestActivity</string>
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+
+    <!-- Manager -->
     <string name="title_activity_manager">Manager</string>
-    <string name="hello_world">Hello world!</string>
+    
+    <string name="title_activity_create">Create Team</string>
+    <string name="title_activity_join">Join Team</string>
+    
+    <!-- Radio Button for Pie Section Selection -->
+    <string name="radio_six">6 skills</string>
+    <string name="radio_eight">8 skills</string>
 
 </resources>

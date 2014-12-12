@@ -6,8 +6,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -16,24 +14,15 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 /**
  * Activity which displays a login screen to the user, offering registration as
  * well.
  */
 public class LoginActivity extends Activity {
-   /**
-    * A dummy authentication store containing known user names and passwords.
-    * TODO: remove after connecting to a real authentication system.
-    */
-   private static ArrayList<String> dummyCredentials = new ArrayList<String>();
-
    /**
     * Keep track of the login task to ensure we can cancel it if requested.
     */
@@ -44,6 +33,7 @@ public class LoginActivity extends Activity {
    private String password;
    
    private final int MIN_STRING_LENGTH = 4;
+   private static ArrayList<String> dummyCredentials = new ArrayList<String>();
 
    // UI references.
    private EditText userView;
@@ -59,7 +49,6 @@ public class LoginActivity extends Activity {
       setContentView(R.layout.activity_login);
       getActionBar().hide();
       
-      // TODO: Remove later
       dummyCredentials.add("test:test");
       
       // Set up the login form.
@@ -101,16 +90,6 @@ public class LoginActivity extends Activity {
             }               
       });
       // End of add 11292014 <-
-      
-      
-      Button btnManager = (Button) findViewById(R.id.btnManager);
-      btnManager.setOnClickListener(new OnClickListener(){
-    	  public void onClick(View v) {
-    		  Intent intent = new Intent(v.getContext(), Manager.class);
-    		  startActivityForResult(intent, 0);
-    	  }
-      });
-      
    }
 
    @Override
@@ -134,7 +113,7 @@ public class LoginActivity extends Activity {
       passwordView.setError(null);
 
       // Store values at the time of the login attempt.
-      username = userView.getText().toString();
+      username = userView.getText().toString().toLowerCase();
       password = passwordView.getText().toString();
 
       boolean cancel = false;
@@ -217,26 +196,30 @@ public class LoginActivity extends Activity {
     */
    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
       protected Boolean doInBackground(Void... params) {
-         // TODO: attempt authentication against a network service.
-
          try {
             // Simulate network access.
             Thread.sleep(2000);
          } catch (InterruptedException e) {
             return false;
          }
-
-         // TODO: check from DB account info
+         
          for (String credential : dummyCredentials) {
             String[] pieces = credential.split(":");
             if (pieces[0].equals(username)) {
                // Account exists, return true if the password matches.
-               return pieces[1].equals(password);
+               if (pieces[1].equals(password))
+                  return true;
             }
          }
+         
+         Database db = new Database();
+//         if (db.getUser(username) != null) {
+            // Account exists, return true if the password matches.
+            return db.getUserPassword(username).equals(Database.MD5(password));
+//         }
 
          // No account info is found.
-         return false;
+//         return false;
       }
 
       protected void onPostExecute(final Boolean success) {
@@ -246,8 +229,9 @@ public class LoginActivity extends Activity {
          if (success) {
             // Go on to the next activity
             Intent intent = new Intent();
-            intent.setClass(LoginActivity.this, ProjectActivity.class);
-            intent.putExtra("USER_NAME", username);
+            intent.setClass(LoginActivity.this, MainMenu.class);
+            User myUser = new User(username, password, "", "", "");
+            intent.putExtra("USER_INFO", myUser);
             startActivity(intent);
             LoginActivity.this.finish();
          } else {
