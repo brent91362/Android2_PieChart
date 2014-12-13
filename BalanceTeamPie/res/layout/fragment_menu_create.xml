@@ -28,31 +28,12 @@
             android:padding="5dp"
             android:singleLine="true" />
 
-        <RadioGroup
-            android:id="@+id/radio_group_pie_sections" 
-			android:layout_width="fill_parent"
-		    android:layout_height="wrap_content"
-		    android:layout_below="@+id/project_name"
-		    android:orientation="vertical">
-		    
-		    <RadioButton android:id="@+id/radio_six"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:text="@string/radio_six"
-		        style="@style/label_text_style" />
-		    <RadioButton android:id="@+id/radio_eight"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:text="@string/radio_eight"
-		        style="@style/label_text_style" />
-		</RadioGroup>
-        
         <EditText
             android:id="@+id/skill_name1"
             android:hint="@string/hint_skill_name1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/radio_group_pie_sections"
+            android:layout_below="@+id/project_name"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
             android:background="@drawable/edittext_top_bg"
@@ -168,6 +149,20 @@
             android:layout_below="@+id/skill_name8"
             android:background="@drawable/button_blue"
             android:text="Create" />
+
+        <ToggleButton
+            android:id="@+id/sixOrEight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/button_create"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="26dp"
+            android:text="ToggleButton"
+            android:textOff="Six skills"
+			android:textOn="Eight Skills" 
+			
+             />
+
     </RelativeLayout>
 
 </ScrollView>

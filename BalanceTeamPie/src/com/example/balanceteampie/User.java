@@ -70,6 +70,7 @@ public class User implements Parcelable{
        }
        return false;
    }
+   public void setUsername(String u) { username = u; }
    public void setFirstName(String f) { fName = f; }
    public void setLastName(String l) { lName = l; }
    public void setTeamId(int id) { teamId = id; }

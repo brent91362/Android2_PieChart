@@ -129,16 +129,15 @@ public class RegisterActivity extends Activity implements OnClickListener{
    
    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
       protected Boolean doInBackground(Void... params) {
-         db.createUser(username, password, fname, lname, email);
-         String s = "User has been successfully created.";
-         Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
-         finish();
          return true;
       }
 
       protected void onPostExecute(final Boolean success) {
          if(success) {
-            
+            db.createUser(username, password, fname, lname, email);
+            String s = "User has been successfully created.";
+            Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
+            finish();
          }
       }
 

@@ -4,9 +4,6 @@ import java.util.StringTokenizer;
 
 import android.os.Bundle;
 import android.app.Activity;
-import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff.Mode;
@@ -15,9 +12,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.*;
 
-public class MainActivity extends Activity implements AllPerson{
-	private static final String TABLE = "Experience";
-	SQLiteDatabase db;
+public class MainActivity extends Activity {
 	final String dbName = "PieChartdb";
    static final int MAX_SECTION = 8;
    static final int MAX_LEVEL = 4;
@@ -34,6 +29,8 @@ public class MainActivity extends Activity implements AllPerson{
    
    User myUser; // Add by MinL 12112014
    
+   Database db = new Database();
+   
    @Override
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
@@ -44,24 +41,24 @@ public class MainActivity extends Activity implements AllPerson{
       myUser = (User) getIntent().getParcelableExtra("USER_INFO");
       
       //  Then, get pie values from DB (if ever worked on)
-      String[] sn = new String[8];
-      int[] sl = new int[8];
-      int ind = 0;
-      Database db = new Database();
       String pieName = db.getUserPieName(myUser.getUsername());
-      if (pieName != null) {
-         StringTokenizer st = new StringTokenizer(pieName, "~");
-         while (st.hasMoreTokens()) {
-            if (st.nextToken().equals("six")) {
-               sn = new String[6];
-               sl = new int[6];
-            }
-            if(ind < sn.length)
-               sn[ind] = st.nextToken();
-            ind++;
-         }
-         myUser.setSkillNames(sn);         
-      }
+//      String[] sn = new String[8];
+//      int[] sl = new int[8];
+//      int ind = 0;
+      
+//      if (pieName != null) {
+//         StringTokenizer st = new StringTokenizer(pieName, "~");
+//         while (st.hasMoreTokens()) {
+//            if (st.nextToken().equals("six")) {
+//               sn = new String[6];
+//               sl = new int[6];
+//            }
+//            if(ind < sn.length)
+//               sn[ind] = st.nextToken();
+//            ind++;
+//         }
+//         myUser.setSkillNames(sn);         
+//      }
       // End of add  12112014 <-
       
       setPieInfo();
@@ -83,8 +80,10 @@ public class MainActivity extends Activity implements AllPerson{
          secTxtVw[i] = (TextView) findViewById(R.id.skill_name1 + i);      
       // End of add  11227014 <-
       
-      if (sn != null) 
-         setSkillNames(sn);
+//      if (sn != null) 
+//         setSkillNames(sn);
+      setPieValues(pieName);
+      setPieAttributes(pieName);
    }
    
    /**
@@ -189,14 +188,46 @@ public class MainActivity extends Activity implements AllPerson{
       else
          return false;
    }
+
+   public void setPieAttributes(String piename) {
+    String[] sn = new String[8];
+    int[] sl = new int[8];
+//    int ind = 0;
+    if (piename != null) {
+//       StringTokenizer st = new StringTokenizer(pieName, "~");
+//       while (st.hasMoreTokens()) {
+//          if (st.nextToken().equals("six")) {
+//             sn = new String[6];
+//             sl = new int[6];
+//          }
+//          if(ind < sn.length)
+//             sn[ind] = st.nextToken();
+//          ind++;
+//       }
+       sn = db.getPieAttributes(myUser.getUsername(), piename);
+       if (sn != null) {
+          myUser.setSkillNames(sn);
+          setSkillNames(sn);
+       }
+    }
+   }
    
    /**
     * Add By MinL 12112014
-    * @param sn
+    * @param sn: a string array of skill names
     */
    public void setSkillNames(String [] sn) {
       for(int i = 0; i < sn.length; i++) {
          secTxtVw[i].setText(sn[i]);
+      }
+   }
+   
+   public void setPieValues(String piename) {
+      int[] vals = db.getPieValues(myUser.getUsername(), piename);
+      for(int i = 0; i < vals.length; i++) {
+         for(int j = 0; j < vals[i]; j++) {
+            setLevel(i);
+         }         
       }
    }
    
@@ -313,46 +344,4 @@ public class MainActivity extends Activity implements AllPerson{
       }
       return super.onOptionsItemSelected(item);
    }
-
-@Override
-public int getPieValues() {
-	// TODO Auto-generated method stub
-	return 0;
-}
-
-@Override
-public int getColor() {
-	// TODO Auto-generated method stub
-	return 0;
-}
-
-@Override
-public void setPieValues(int[] experience) {
-	try{
-		db = openOrCreateDatabase(dbName, Context.MODE_PRIVATE,null);
-        db.execSQL("CREATE TABLE IF  NOT EXISTS "+ TABLE +" (ID INTEGER PRIMARY KEY, NAME TEXT, PLACE TEXT);");
-        String exp="5, 6";
-        db.execSQL("INSERT INTO " + TABLE + "(NAME, Value) VALUES('Employee1',exp )");
-        Cursor getvalues = db.rawQuery("SELECT Value FROM"+ TABLE,null);
-        Integer vales=getvalues.getCount();
-        System.out.println("\n\n"+vales);
-	}
-	catch(Exception e){
-		System.out.println(e.getMessage());
-	}
-	
-}
-
-@Override
-public void setColor(int[] rgb) {
-	// TODO Auto-generated method stub
-	
-}
-
-@Override
-public PieInfo getpie() {
-	// TODO Auto-generated method stub
-	return null;
-}
-
 }
