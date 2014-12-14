@@ -89,7 +89,7 @@ public class ProjectActivity extends Activity {
 		case R.id.action_signout:
 			Toast.makeText(this, "Sign out selected", Toast.LENGTH_SHORT)
 					.show();
-			ProjectActivity.this.finish();
+			finish();
 			break;
 		default:
 			break;

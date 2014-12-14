@@ -72,7 +72,7 @@ public class CreateActivity extends Activity implements OnClickListener {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.create, menu);
+//		getMenuInflater().inflate(R.menu.create, menu);
 		return true;
 	}	
 	

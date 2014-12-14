@@ -196,13 +196,6 @@ public class LoginActivity extends Activity {
     */
    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
       protected Boolean doInBackground(Void... params) {
-         try {
-            // Simulate network access.
-            Thread.sleep(2000);
-         } catch (InterruptedException e) {
-            return false;
-         }
-         
          for (String credential : dummyCredentials) {
             String[] pieces = credential.split(":");
             if (pieces[0].equals(username)) {
@@ -211,13 +204,10 @@ public class LoginActivity extends Activity {
                   return true;
             }
          }
-         
-         Database db = new Database();
-//         if (db.getUser(username) != null) {
-            // Account exists, return true if the password matches.
-            return db.getUserPassword(username).equals(Database.MD5(password));
-//         }
 
+         Database db = new Database();
+         // Account exists, return true if the password matches.
+         return db.getUserPassword(username).equals(Database.MD5(password));
       }
 
       protected void onPostExecute(final Boolean success) {

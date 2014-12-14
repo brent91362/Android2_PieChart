@@ -34,13 +34,7 @@ public class MainActivity extends Activity {
    @Override
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
-      setContentView(R.layout.activity_main);
-   
-      // Add by MinL 12112014 ->
-      myUser = (User) getIntent().getParcelableExtra("USER_INFO");
-      String pieName = db.getUserPieName(myUser.getUsername());
-      boolean canEdit = getIntent().getBooleanExtra("PERMISSION_TO_EDIT", true);
-      // End of add  12112014 <-
+      setContentView(R.layout.activity_main);      
       
       setPieInfo();
       setImgBtn();
@@ -58,7 +52,17 @@ public class MainActivity extends Activity {
       
       for (int i = 0; i < MAX_SECTION; i++)
          secTxtVw[i] = (TextView) findViewById(R.id.skill_name1 + i);      
-      // End of add  11227014 <-
+      // End of add  11227014 <-      
+   }
+   
+   protected void onStart() {
+      super.onStart();
+      
+      // Add by MinL 12112014 ->
+      myUser = (User) getIntent().getParcelableExtra("USER_INFO");
+      String pieName = db.getUserPieName(myUser.getUsername());
+      boolean canEdit = getIntent().getBooleanExtra("PERMISSION_TO_EDIT", true);
+      // End of add  12112014 <-
       
       if (!canEdit) {
          saveBtn.setEnabled(false);
@@ -322,7 +326,7 @@ public class MainActivity extends Activity {
    @Override
    public boolean onCreateOptionsMenu(Menu menu) {
       // Inflate the menu; this adds items to the action bar if it is present.
-      getMenuInflater().inflate(R.menu.main, menu);
+//      getMenuInflater().inflate(R.menu.main, menu);
       return true;
    }
    
