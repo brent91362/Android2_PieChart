@@ -1,7 +1,6 @@
 package com.example.balanceteampie;
 
-import java.util.StringTokenizer;
-
+import java.io.IOException;
 import android.os.Bundle;
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -13,8 +12,7 @@ import android.view.View.OnTouchListener;
 import android.widget.*;
 
 public class MainActivity extends Activity {
-	final String dbName = "PieChartdb";
-   static final int MAX_SECTION = 8;
+	static final int MAX_SECTION = 8;
    static final int MAX_LEVEL = 4;
    static int myColor = Color.argb(150, 204, 0, 0); // Change color here
    static PieInfo pInfo[] = new PieInfo[MAX_SECTION];
@@ -31,34 +29,17 @@ public class MainActivity extends Activity {
    
    Database db = new Database();
    
+   int pieLevel[];
+   
    @Override
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_main);
    
       // Add by MinL 12112014 ->
-      //  Get the selected project name from previous menu activity
       myUser = (User) getIntent().getParcelableExtra("USER_INFO");
-      
-      //  Then, get pie values from DB (if ever worked on)
       String pieName = db.getUserPieName(myUser.getUsername());
-//      String[] sn = new String[8];
-//      int[] sl = new int[8];
-//      int ind = 0;
-      
-//      if (pieName != null) {
-//         StringTokenizer st = new StringTokenizer(pieName, "~");
-//         while (st.hasMoreTokens()) {
-//            if (st.nextToken().equals("six")) {
-//               sn = new String[6];
-//               sl = new int[6];
-//            }
-//            if(ind < sn.length)
-//               sn[ind] = st.nextToken();
-//            ind++;
-//         }
-//         myUser.setSkillNames(sn);         
-//      }
+      boolean canEdit = getIntent().getBooleanExtra("PERMISSION_TO_EDIT", true);
       // End of add  12112014 <-
       
       setPieInfo();
@@ -67,11 +48,10 @@ public class MainActivity extends Activity {
       hotspotImgBtn = (ImageButton) findViewById(R.id.ib_pie_hs);
       
       pieImgView = (ImageView) findViewById(R.id.image_pie);
-      pieImgView.setOnTouchListener(hsTouchListener);
       
       // Add by MinL 11227014 ->
       saveBtn = (Button) findViewById(R.id.button_save);
-      saveBtn.setOnClickListener(funcClickListener);     
+      saveBtn.setOnClickListener(funcClickListener);
       
       hideBtn = (Button) findViewById(R.id.button_hide);
       hideBtn.setOnClickListener(funcClickListener);
@@ -80,10 +60,16 @@ public class MainActivity extends Activity {
          secTxtVw[i] = (TextView) findViewById(R.id.skill_name1 + i);      
       // End of add  11227014 <-
       
-//      if (sn != null) 
-//         setSkillNames(sn);
-      setPieValues(pieName);
+      if (!canEdit) {
+         saveBtn.setEnabled(false);
+         saveBtn.setVisibility(View.INVISIBLE);
+      }
+      else {
+         pieImgView.setOnTouchListener(hsTouchListener);
+      }
+      
       setPieAttributes(pieName);
+      setPieValues(pieName);
    }
    
    /**
@@ -96,12 +82,32 @@ public class MainActivity extends Activity {
       public void onClick(View v) {
          Button btn = (Button) v;
          if (btn.getId() == R.id.button_save) {
-            //Save pie info to DB
-            int pieLevel[] = new int[MAX_SECTION];
-            for (int i = 0; i < pInfo.length; i++) {
+            int pieLevel[] = new int[myUser.getNumOfSkills()];
+            String pieValue = "";
+            String pieId = db.getUserPieId(myUser.getUsername());
+            for (int i = 0; i < pieLevel.length; i++) {
                pieLevel[i] = pInfo[i].getCountLevel();
-            }            
-            setToast("submit pieLevel[] to DB");
+               pieValue += pieLevel[i];               
+            }
+            myUser.setSkillLevels(pieLevel);
+            
+            // update or create user pie            
+            if (pieId == null) {
+               String pieName = "";
+               if (myUser.getNumOfSkills() == 6) pieName = "six";
+               if (myUser.getNumOfSkills() == 8) pieName = "eight";
+               
+               db.CreatePie(myUser.getUsername(), pieName, 
+                     myUser.getSkillNameList(), Integer.parseInt(pieValue), 1);
+            }
+            else {
+               try {
+                  // TODO: bad design, pie value cannot start with 0 level
+                  db.updateuserPie(pieId, pieValue);
+               } catch (IOException e) {
+                  e.printStackTrace();
+               }
+            }
          }
          if (btn.getId() == R.id.button_hide) {
             if (secTxtVw[0].getVisibility() == View.INVISIBLE) {
@@ -121,7 +127,7 @@ public class MainActivity extends Activity {
    };
    
    /**
-    * Use the touched color to find out which section levels to be set
+    * Use the touched color to find out which section and levels to be set
     */
    private final OnTouchListener hsTouchListener = new OnTouchListener() {
       @Override
@@ -130,24 +136,11 @@ public class MainActivity extends Activity {
          final int evY = (int) event.getY();
          if(event.getAction() == MotionEvent.ACTION_UP) {
             int touchColor = getHotspotColor (R.id.ib_pie_hs, evX, evY);
-            if (matchColor(pInfo[0].getColor(), touchColor)) {              
-               setLevel(0);
-            } else if (matchColor(pInfo[1].getColor(), touchColor)) {
-               setLevel(1);
-            } else if (matchColor(pInfo[2].getColor(), touchColor)) {
-               setLevel(2);
-            } else if (matchColor(pInfo[3].getColor(), touchColor)) {
-               setLevel(3);
-            } else if (matchColor(pInfo[4].getColor(), touchColor)) {
-               setLevel(4);
-            } else if (matchColor(pInfo[5].getColor(), touchColor)) {
-               setLevel(5);
-            } else if (matchColor(pInfo[6].getColor(), touchColor)) {
-               setLevel(6);
-            } else if (matchColor(pInfo[7].getColor(), touchColor)) {
-               setLevel(7);
-            } else {
-               //setToast("Touched elsewhere");
+            for (int i = 0; i < myUser.getNumOfSkills(); i++) {
+               if (matchColor(pInfo[i].getColor(), touchColor)) {              
+                  setLevel(i);
+                  return true;
+               }
             }
          }
          return true;
@@ -189,39 +182,36 @@ public class MainActivity extends Activity {
          return false;
    }
 
+   /**
+    * Add by MinL 12122014
+    * Set the pie name labels depends on the number of sections
+    * @param piename: pie name from database
+    */
    public void setPieAttributes(String piename) {
-    String[] sn = new String[8];
-    int[] sl = new int[8];
-//    int ind = 0;
-    if (piename != null) {
-//       StringTokenizer st = new StringTokenizer(pieName, "~");
-//       while (st.hasMoreTokens()) {
-//          if (st.nextToken().equals("six")) {
-//             sn = new String[6];
-//             sl = new int[6];
-//          }
-//          if(ind < sn.length)
-//             sn[ind] = st.nextToken();
-//          ind++;
-//       }
-       sn = db.getPieAttributes(myUser.getUsername(), piename);
-       if (sn != null) {
-          myUser.setSkillNames(sn);
-          setSkillNames(sn);
-       }
-    }
+      String[] sn = new String[MAX_SECTION];
+      if (piename != null) {
+         sn = db.getPieAttributes(myUser.getUsername(), piename);
+         if (sn != null) {
+            myUser.setSkillNames(sn);
+            // Set pie section(slices) names on the screen
+            int numOfSkills = myUser.getNumOfSkills();
+            for (int i = 0; i < numOfSkills; i++) {
+               secTxtVw[i].setText(sn[i]);
+            }
+            // Hide the unused name labels
+            for (int i = numOfSkills; i < MAX_SECTION; i++) {
+               secTxtVw[i].setText("");
+               secTxtVw[i].setVisibility(View.INVISIBLE);
+            }            
+         }
+      }
    }
    
    /**
     * Add By MinL 12112014
-    * @param sn: a string array of skill names
+    * Set the pie values depends on the number of sections
+    * @param piename: pie name from database
     */
-   public void setSkillNames(String [] sn) {
-      for(int i = 0; i < sn.length; i++) {
-         secTxtVw[i].setText(sn[i]);
-      }
-   }
-   
    public void setPieValues(String piename) {
       int[] vals = db.getPieValues(myUser.getUsername(), piename);
       for(int i = 0; i < vals.length; i++) {
@@ -229,8 +219,12 @@ public class MainActivity extends Activity {
             setLevel(i);
          }         
       }
+      myUser.setSkillLevels(vals);
    }
-   
+   /**
+    * Increment the skill level from zero to four
+    * @param secId
+    */
    public void setLevel(int secId) {
       // increment level
       pInfo[secId].setCountLevel();
@@ -239,8 +233,8 @@ public class MainActivity extends Activity {
       if(pInfo[secId].getCountLevel() > MAX_LEVEL)
          pInfo[secId].resetLevel();
       
-      setToast("Section: " + (secId + 1) + "\n" 
-               + "Skill Level: " + pInfo[secId].getCountLevel());
+//      setToast("Section: " + (secId + 1) + "\n" 
+//               + "Skill Level: " + pInfo[secId].getCountLevel());
       
       secImgBtn[secId].setVisibility(View.VISIBLE); // fixed by MinL 12112014
       

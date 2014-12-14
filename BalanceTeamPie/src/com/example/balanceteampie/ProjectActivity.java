@@ -53,10 +53,14 @@ public class ProjectActivity extends Activity {
 					int position, long id) {
 
 				Intent intent = new Intent();
-				// Pass selected name for pie view
-				userName = (String) list.getItemAtPosition(position);
-				myUser.setUsername(userName);
-				intent.putExtra("USER_INFO", myUser);
+				// Pass selected member info for pie view
+				userName = (String) list.getItemAtPosition(position);				
+				User userMember = new User(userName, "", "", "", "");
+				userMember.setTeamId(myUser.getTeamId());
+				intent.putExtra("USER_INFO", userMember);
+				
+				// Determine the pie is view only
+				intent.putExtra("PERMISSION_TO_EDIT", false);
 				
 				intent.setClass(ProjectActivity.this, MainActivity.class);
 				startActivity(intent);
@@ -67,7 +71,7 @@ public class ProjectActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu items for use in the action bar
-		getActionBar().setTitle("Project Selection");
+		getActionBar().setTitle("Team Members");
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.project, menu);
 		return super.onCreateOptionsMenu(menu);
@@ -78,12 +82,14 @@ public class ProjectActivity extends Activity {
 		switch (item.getItemId()) {
 		// action with ID action_refresh was selected
 		case R.id.action_refresh:
-			Toast.makeText(this, "Refresh selected", Toast.LENGTH_SHORT).show();
+		   populateListView();
+			Toast.makeText(this, "Refresh", Toast.LENGTH_SHORT).show();
 			break;
 		// action with ID action_settings was selected
 		case R.id.action_signout:
 			Toast.makeText(this, "Sign out selected", Toast.LENGTH_SHORT)
 					.show();
+			ProjectActivity.this.finish();
 			break;
 		default:
 			break;

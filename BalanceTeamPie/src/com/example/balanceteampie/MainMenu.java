@@ -3,42 +3,46 @@ package com.example.balanceteampie;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainMenu extends Activity implements OnClickListener {
 
 	User myUser;
 	Database db = new Database();
+	String teamId;
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		
+	protected void onCreate(Bundle savedInstanceState) {		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main_menu);
 		
-		myUser = (User) getIntent().getParcelableExtra("USER_INFO");		
-		UserInfoGet uGet = new UserInfoGet();
-		uGet.execute((Void) null);
-		
+		myUser = (User) getIntent().getParcelableExtra("USER_INFO");
+				
 		findViewById(R.id.btnCreate).setOnClickListener(this);
 		findViewById(R.id.btnJoin).setOnClickListener(this);
 		findViewById(R.id.btnView2).setOnClickListener(this);
 		findViewById(R.id.editPie).setOnClickListener(this);
 		findViewById(R.id.btnTeamPie).setOnClickListener(this);
 	}
+	
+	protected void onStart() {
+	   super.onStart();
+	   UserInfoGet uGet = new UserInfoGet();
+      uGet.execute((Void) null);
+	}
 
 	public class UserInfoGet extends AsyncTask<Void, Void, Boolean> {
       protected Boolean doInBackground(Void... params) {
          // DB Calls
-         String userId = db.getUserTeamID(myUser.getUsername());
-         if(userId != null) {
-            myUser.setTeamId(Integer.parseInt(userId));
+         teamId = db.getUserTeamID(myUser.getUsername());
+         if(teamId != null) {
+            myUser.setTeamId(Integer.parseInt(teamId));
             return true;
          }
          return false;
@@ -49,8 +53,6 @@ public class MainMenu extends Activity implements OnClickListener {
          if(success) {
             TextView teamIdText = (TextView) findViewById(R.id.teamIdText);
             teamIdText.setText("Team ID#: " + myUser.getTeamId());
-//            String s = "UserId has been found.";
-//            Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
          }
       }
 
@@ -70,7 +72,7 @@ public class MainMenu extends Activity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		Intent intent = new Intent();
-
+		
 		switch (v.getId()) {
 		case R.id.btnCreate:
 			intent.setClass(MainMenu.this, CreateActivity.class);
@@ -80,21 +82,46 @@ public class MainMenu extends Activity implements OnClickListener {
 			intent.setClass(MainMenu.this, JoinActivity.class);
 			intent.putExtra("USER_INFO", myUser);
 			break;
+		case R.id.btnTeamPie:
+		   if (teamId == null) {
+            new AlertDialog.Builder(this)
+            .setTitle("No Team Has Found")
+            .setMessage("Please start with join a team or create a team.")
+            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+               public void onClick(DialogInterface dialog, int which) { 
+                  return;
+               }
+            })
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .show();
+            return;
+         }
+         intent.setClass(MainMenu.this, Manager.class);
+         intent.putExtra("USER_INFO", myUser);
+         intent.putExtra("teamMemName", "");
+         break;
 		case R.id.btnView2:
 			intent.setClass(MainMenu.this, ProjectActivity.class);
 			intent.putExtra("USER_INFO", myUser);
 			break;
 		case R.id.editPie:
+		   if (teamId == null) {
+		      new AlertDialog.Builder(this)
+		      .setTitle("No Team Has Found")
+		      .setMessage("Please start with join a team or create a team.")
+		      .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+		         public void onClick(DialogInterface dialog, int which) { 
+		            return;
+		         }
+		      })
+		      .setIcon(android.R.drawable.ic_dialog_alert)
+		      .show();
+		      return;
+         }
 			intent.setClass(MainMenu.this, MainActivity.class);
 			intent.putExtra("USER_INFO", myUser);
-			break;
-		case R.id.btnTeamPie:
-			intent.setClass(MainMenu.this, Manager.class);
-			intent.putExtra("USER_INFO", myUser);
-			intent.putExtra("teamMemName", "");
-			break;
+			break;		
 		}
 		startActivity(intent);
-		MainMenu.this.finish();
 	}
 }

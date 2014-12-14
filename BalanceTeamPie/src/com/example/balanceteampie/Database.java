@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 import android.os.StrictMode;
+import android.util.Log;
 
 public class Database {
 	/*
@@ -28,7 +29,8 @@ public class Database {
 			att += s;
 			att += ",";
 		}
-		if (Integer.toString(pievalue).length() == 8) {
+		if (Integer.toString(pievalue).length() == 8
+		      || Integer.toString(pievalue).length() == 6) {
 			try {
 				URL url = new URL(
 						"http://btpie.ddns.net/dbfuncts.php?action=createpie&user="
@@ -40,7 +42,7 @@ public class Database {
 			} catch (Exception e) {
 			}
 		} else {
-			// show error
+			Log.e("ERROR", "cannot create pie");
 		}
 	}
 
@@ -178,10 +180,15 @@ public class Database {
 		try {
 			URL url = new URL("http://btpie.ddns.net/dbfuncts.php?action"
 					+ "=updateuser&user=" + userID + "&team_id=" + teamId);
-			URLConnection conn = url.openConnection();
-			conn.setDoOutput(true);
-			conn.getInputStream();
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			try {
+			   conn.setDoOutput(true);
+			   conn.getInputStream();
+			} finally {
+			   conn.disconnect();
+			}
 		} catch (Exception e) {
+		   Log.e("ERROR", "Cannot change team");
 		}
 	}
 
@@ -199,7 +206,7 @@ public class Database {
 	/*
 	 * change team leader
 	 */
-	public void updateTeamLeader(String userId, int newTeamLeader) {
+	public void updateTeamLeader(String userId, String newTeamLeader) {
 		try {
 			URL url = new URL(
 					"http://btpie.ddns.net/dbfuncts.php?action=updateteam&team_id="
@@ -216,6 +223,7 @@ public class Database {
 	 */
 	public void updateuserPie(String pieId, int[] values) throws IOException {
 		try {
+		   
 			URL url = new URL(
 					"http://btpie.ddns.net/dbfuncts.php?action=updateuserpie&pie_id="
 							+ pieId + "&pie_value=" + values);
@@ -226,6 +234,27 @@ public class Database {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * Add by MinL
+	 * To update the values as a string of levels
+	 * @param pieId
+	 * @param values
+	 * @throws IOException
+	 */
+	public void updateuserPie(String pieId, String values) throws IOException {
+	   try {
+
+	      URL url = new URL(
+	            "http://btpie.ddns.net/dbfuncts.php?action=updateuserpie&pie_id="
+	                  + pieId + "&pie_value=" + values);
+	      URLConnection conn = url.openConnection();
+	      conn.setDoOutput(true);
+	      conn.getInputStream();
+	   } catch (MalformedURLException e) {
+	      e.printStackTrace();
+	   }
 	}
 
 	/*
@@ -459,15 +488,17 @@ public class Database {
 
 	/*
 	 * Convert a string to int[] based on position of number
+	 * Modified by MinL 12132014
 	 */
 	public int[] toIntArray(String value) {
-		int[] pievals = new int[8];
-		if (!value.equals(null)) {
-			for (int i = 0; i < pievals.length; i++) {
-				pievals[i] = value.charAt(i) - '0';
-			}
-		}
-		return pievals;
+	   int[] pievals = null;
+      if (!value.equals(null)) {
+         pievals = new int[value.length()];
+         for (int i = 0; i < pievals.length; i++) {
+            pievals[i] = value.charAt(i) - '0';
+         }
+      }
+      return pievals;
 	}
 
 	/*
@@ -498,7 +529,6 @@ public class Database {
 			URL url = new URL(
 					"http://btpie.ddns.net/dbfuncts.php?action=getuser&user="
 							+ userID);
-//			URLConnection conn = url.openConnection();
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			try {
    			conn.setDoOutput(true);
@@ -506,7 +536,6 @@ public class Database {
    			
    			String line, holder = null;
    			
-   			InputStreamReader ir = new InputStreamReader(conn.getInputStream());
    			BufferedReader reader = new BufferedReader(new InputStreamReader(
    					conn.getInputStream()));
    			
@@ -520,8 +549,12 @@ public class Database {
    			
    			while (st.hasMoreTokens() && !found) {
    				String temp = st.nextToken();
-   				if (temp.equals("team_id"))
-   					return st.nextToken();
+   				if (temp.equals("team_id")) {
+   				   String tID = st.nextToken();
+   				   if (tID.contains("null"))
+   				      return null;
+   					return tID;
+   				}
    			}
 			}
 			finally {
@@ -530,6 +563,111 @@ public class Database {
 		} catch (Exception e) {
 		}
 		return null;
+	}
+	
+	/**
+	 * Get the leader's team id
+	 * @param userID: user_account_id number
+	 * @param teamName: team_name (or project name)
+	 * @return a string of teamID number
+	 */
+	public String getLeaderTeamID(String userID, String teamName) {
+      try {
+         URL url = new URL(
+               "http://btpie.ddns.net/dbfuncts.php?action=getteamlist");
+         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+         try {
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            
+            String line, holder = null;
+            
+            BufferedReader reader = new BufferedReader(new InputStreamReader(
+                  conn.getInputStream()));
+            
+            while ((line = reader.readLine()) != null)
+               holder = (line);
+
+            reader.close();
+
+            StringTokenizer st = new StringTokenizer(holder, "}");
+            boolean found = false;
+            String teamId = "";
+            
+            while (st.hasMoreTokens() && !found) {
+               String tempp = st.nextToken();
+               StringTokenizer st2 = new StringTokenizer(tempp, "\":,");
+               while (st2.hasMoreTokens()) {
+                  String temp = st2.nextToken();
+                  if (temp.equals("team_id")) {
+                     String temp2 = st2.nextToken();
+                     teamId = temp2;                   
+                  }
+                  if (temp.equals("team_leader_id")) {
+                     String temp2 = st2.nextToken();
+                     if (temp2.equals(userID)) {
+                        temp = st2.nextToken();
+                        if (temp.equals("team_name")) {
+                           String temp3 = st2.nextToken();
+                           if (temp3.equals(teamName)) {
+                              return teamId;
+                           }                     
+                        }
+                     }                     
+                  }                  
+               }
+            }
+         }
+         finally {
+            conn.disconnect();
+         }
+      } catch (Exception e) {
+      }
+      return null;
+   }
+	
+	 /**
+    * Get user's account id number from username
+    * @param username
+    * @return a string of account_id number
+    */
+	public String getAccountId(String username) {
+	   String id_number = null;
+	   try {
+	      URL url = new URL(
+	            "http://btpie.ddns.net/dbfuncts.php?action=getuser&user="
+	                  + username);
+	      HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+	      try {
+	         conn.setDoOutput(true);
+	         conn.setDoInput(true);
+
+	         String line, holder = null;
+
+	         BufferedReader reader = new BufferedReader(new InputStreamReader(
+	               conn.getInputStream()));
+
+	         while ((line = reader.readLine()) != null)
+	            holder = (line);
+
+	         reader.close();
+
+	         StringTokenizer st = new StringTokenizer(holder, "}\":");
+	         boolean found = false;
+
+	         while (st.hasMoreTokens() && !found) {
+	            String temp = st.nextToken();
+	            if (temp.equals("user_account_id"))
+	               return st.nextToken();
+	         }
+	      }
+	      finally {
+	         conn.disconnect();
+	      }
+	   } catch (Exception e) {
+	      Log.e("ERROR", "Account id not found.");
+	   }
+	   return id_number;
 	}
 
 	/*
@@ -594,13 +732,17 @@ public class Database {
 	
 	public void createTeam(String username, String TeamName) {
 		try {
-			URL url = new URL("btpie.ddns.net/dbfuncts.php?action=createteam"
+			URL url = new URL("http://btpie.ddns.net/dbfuncts.php?action=createteam"
 					+ "&team_leader=" + username + "&team_name=" + TeamName);
-			URLConnection conn = url.openConnection();
-			conn.getInputStream();
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			try {
+   			conn.setDoOutput(true);
+   			conn.getInputStream();
+			} finally {
+			   conn.disconnect();
+			}
 		} catch (Exception e) {
-
+		   Log.e("ERROR", "cannot create team");
 		}
 	}
-
 }

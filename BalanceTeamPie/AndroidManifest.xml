@@ -32,7 +32,11 @@
         </activity>
         <activity
             android:name="com.example.balanceteampie.ProjectActivity"
-            android:label="@string/title_activity_project" >
+            android:label="@string/title_activity_project"
+            android:parentActivityName="com.example.balanceteampie.MainMenu" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.balanceteampie.MainMenu" />
         </activity>
         <activity
             android:name="com.example.balanceteampie.MainActivity"
@@ -52,14 +56,16 @@
         </activity>
         <activity
             android:name="com.example.balanceteampie.CreateActivity"
-            android:label="@string/title_activity_create" >
+            android:label="@string/title_activity_create"
+            android:parentActivityName="com.example.balanceteampie.MainMenu" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.balanceteampie.MainMenu" />
         </activity>
         <activity
             android:name="com.example.balanceteampie.JoinActivity"
-            android:label="@string/title_activity_join" >
+            android:label="@string/title_activity_join"
+            android:parentActivityName="com.example.balanceteampie.MainMenu" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.balanceteampie.MainMenu" />

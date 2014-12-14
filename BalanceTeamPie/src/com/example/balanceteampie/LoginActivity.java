@@ -218,8 +218,6 @@ public class LoginActivity extends Activity {
             return db.getUserPassword(username).equals(Database.MD5(password));
 //         }
 
-         // No account info is found.
-//         return false;
       }
 
       protected void onPostExecute(final Boolean success) {

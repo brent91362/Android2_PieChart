@@ -1,6 +1,7 @@
 package com.example.balanceteampie;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -37,7 +38,7 @@ public class User implements Parcelable{
       email = in.readString();
       teamId = in.readInt();
       skillNames = in.createStringArrayList();
-      in.readList(skillLevels, null);
+      skillLevels = (ArrayList<Integer>) in.readSerializable();
    }
    
    public User (String u, String p, String f, String l, String e) {
@@ -56,8 +57,12 @@ public class User implements Parcelable{
    public String getLastName() { return lName; }
    public String getEmail() { return email; }
    public int getTeamId() { return teamId; }
+   public int getNumOfSkills() { return skillNames.size(); }
    public String getSkillName(int section) {
       return skillNames.get(section);
+   }
+   public String[] getSkillNameList() {
+      return skillNames.toArray(new String[skillNames.size()]);
    }
    public int getSkillLevel(int section) {
       return skillLevels.get(section);
@@ -76,12 +81,18 @@ public class User implements Parcelable{
    public void setTeamId(int id) { teamId = id; }
    public void setEmail(String e) { email = e; }
    public void setSkillNames(String[] sn) {
-      for (int i = 0; i < sn.length; i++)
-         skillNames.add(sn[i]);
+      skillNames.clear();
+      for (int i = 0; i < sn.length; i++) {
+         if (sn[i] != null)
+            skillNames.add(sn[i]);
+      }
+      skillNames.trimToSize();
    }
    public void setSkillLevels(int[] sl) {
+      skillLevels.clear();
       for (int i = 0; i < sl.length; i++)
-         skillLevels.add(sl[i]);
+         skillLevels.add(Integer.valueOf(sl[i]));
+      skillLevels.trimToSize();
    }
 
    @Override
@@ -99,6 +110,6 @@ public class User implements Parcelable{
       dest.writeString(email);
       dest.writeInt(teamId);
       dest.writeStringList(skillNames);
-      dest.writeList(skillLevels);      
+      dest.writeSerializable(skillLevels);  
    }
 }

@@ -1,36 +1,37 @@
 package com.example.balanceteampie;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.text.Html;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class JoinActivity extends Activity implements OnClickListener {
 	private EditText teamView;
 	
-	
-	
 	Database db = new Database();
-	//Intent mIntent = getIntent();
-	//String userName = mIntent.getExtras().getString("USER_NAME");
-	//User myUser = (User) mIntent.getParcelableExtra("USER_INFO");
-	String userName;
+	User myUser;
+	String teamId = "";
 	
-	User myUser2;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.fragment_menu_join);
 		
-		Intent i = getIntent();
-		User myUser = (User) i.getParcelableExtra("USER_INFO");
+		myUser = (User) getIntent().getParcelableExtra("USER_INFO");
 		teamView = (EditText) findViewById(R.id.join_team_id);
-		userName = myUser.getUsername();
-		myUser2 = myUser;
+		
+		Button joinBtn = (Button) findViewById(R.id.button_join);
+		joinBtn.setOnClickListener(this);
 	}
 
 	@Override
@@ -46,24 +47,65 @@ public class JoinActivity extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		teamView.setError(null);
 
-		String teamId = teamView.getText().toString();
+		teamId = teamView.getText().toString();
 		if (TextUtils.isEmpty(teamId)) {
 			teamView.setError(getString(R.string.error_field_required));
 			teamView.requestFocus();
 		} else {
-			teamView.setText("");
-			// TODO: send to DB
-//			if (userName == null) {
-//				userName = "Mark";
-//			}
-			int teamID = Integer.parseInt(teamId);
-			db.changeTeam("009", teamID);
-			Intent intent = new Intent();
-			intent.setClass(JoinActivity.this, CreateActivity.class);
-			intent.putExtra("USER_INFO", myUser2);
-			startActivity(intent);
-			JoinActivity.this.finish();
+			// Give a pop up dialog
+			new AlertDialog.Builder(this)
+			.setTitle("Confirm Join")
+			.setMessage(Html.fromHtml("Are you sure you want to join the team? " 
+			   + "<font color='#FF0000'>(This will replace the current team you're in.)</font>"))
+			.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+			   public void onClick(DialogInterface dialog, int which) { 
+			      // continue to join
+			      UserInfoGet uGet = new UserInfoGet();
+		         uGet.execute();
+		         teamView.setText("");
+		         
+		         Intent intent = new Intent();
+		         intent.setClass(JoinActivity.this, MainMenu.class);
+		         intent.putExtra("USER_INFO", myUser);
+		         startActivity(intent);
+		         JoinActivity.this.finish();
+			   }
+			})
+			.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+			   public void onClick(DialogInterface dialog, int which) { 
+			      // do nothing
+			   }
+			})
+			.setIcon(android.R.drawable.ic_dialog_alert)
+			.show();		
 		}
 	}
+	
+	public class UserInfoGet extends AsyncTask<Void, Void, Boolean> {
+      protected Boolean doInBackground(Void... params) {
+         // DB Calls
+         int teamID = Integer.parseInt(teamId);
+         db.changeTeam(myUser.getUsername(), teamID);
+         String userId = db.getUserTeamID(myUser.getUsername());
+         if(userId != null) {
+            myUser.setTeamId(Integer.parseInt(userId));
+            return true;
+         }
+         return false;
+      }
+
+      protected void onPostExecute(final Boolean success) {
+         // Any post message
+         if(success) {
+            Toast.makeText(getApplicationContext(), "Team changed", Toast.LENGTH_SHORT)
+            .show();
+         }
+      }
+
+      @Override
+      protected void onCancelled() {
+         
+      }
+   }
 
 }

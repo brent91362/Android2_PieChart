@@ -6,12 +6,9 @@
  */
 package com.example.balanceteampie;
 
-import com.example.balanceteampie.LoginActivity.UserLoginTask;
-
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
-import android.content.Intent;
 import android.util.Patterns;
 import android.view.Menu;
 import android.view.View;
@@ -115,10 +112,6 @@ public class RegisterActivity extends Activity implements OnClickListener{
          if (cancel) {
             focusView.requestFocus();
          } else {
-//            db.createUser(username, password, fname, lname, email);
-//            String s = "User has been successfully created.";
-//            Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
-//            finish();
             mAuthTask = new UserLoginTask();
             mAuthTask.execute((Void) null);
          }         
@@ -129,12 +122,12 @@ public class RegisterActivity extends Activity implements OnClickListener{
    
    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
       protected Boolean doInBackground(Void... params) {
+         db.createUser(username, password, fname, lname, email);
          return true;
       }
 
       protected void onPostExecute(final Boolean success) {
          if(success) {
-            db.createUser(username, password, fname, lname, email);
             String s = "User has been successfully created.";
             Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT).show();
             finish();

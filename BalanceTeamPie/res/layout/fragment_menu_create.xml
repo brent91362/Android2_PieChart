@@ -134,34 +134,34 @@
             android:layout_below="@+id/skill_name7"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
-            android:layout_marginBottom="10dp"
             android:background="@drawable/edittext_bottom_bg"
             android:inputType="text"
             android:maxLines="1"
             android:padding="5dp"
             android:singleLine="true" />
 
+        <ToggleButton
+            android:id="@+id/sixOrEight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/skill_name8"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:textColor="#FFFFFF"
+            android:text="ToggleButton"
+            android:checked="true"
+            android:textOff="Six skills"
+			android:textOn="Eight Skills" />
+        
         <Button
             android:id="@+id/button_create"
             style="@style/button_text_style"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/skill_name8"
+            android:layout_below="@+id/sixOrEight"
             android:background="@drawable/button_blue"
             android:text="Create" />
-
-        <ToggleButton
-            android:id="@+id/sixOrEight"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/button_create"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="26dp"
-            android:text="ToggleButton"
-            android:textOff="Six skills"
-			android:textOn="Eight Skills" 
-			
-             />
 
     </RelativeLayout>
 

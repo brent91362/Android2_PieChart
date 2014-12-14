@@ -1,0 +1,308 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg"
+    tools:context=".Manager" >
+     
+    <ImageView
+        android:id="@+id/pie_full_m"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/pie_full" />    
+          
+    <ImageView
+        android:id="@+id/piesec1_2_r1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/piesec1_2_r" />
+    
+    <ImageView
+        android:id="@+id/piesec1_3_r1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/piesec1_3_r" />
+
+    <ImageView
+        android:id="@+id/piesec1_4_r1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/piesec1_4_r" />
+        
+    <ImageView
+        android:id="@+id/piesec2_2_r1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/piesec2_2_r" />
+
+    <ImageView
+        android:id="@+id/piesec2_3_r1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/piesec2_3_r" />
+
+    <ImageView
+        android:id="@+id/piesec2_4_r1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/piesec2_4_r" />   
+
+    <ImageView
+        android:id="@+id/piesec3_2_r1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/piesec3_2_r" />
+
+    <ImageView
+        android:id="@+id/piesec3_3_r1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/piesec3_3_r" />
+
+    <ImageView
+        android:id="@+id/piesec3_4_r1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/piesec3_4_r" />    
+ 
+    <ImageView
+        android:id="@+id/piesec4_2_r1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/piesec4_2_r" />
+
+    <ImageView
+        android:id="@+id/piesec4_3_r1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/piesec4_3_r" />
+
+    <ImageView
+        android:id="@+id/piesec4_4_r1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/piesec4_4_r" />
+   
+    <ImageView
+        android:id="@+id/piesec5_2_r1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/piesec5_2_r" />
+
+    <ImageView
+        android:id="@+id/piesec5_3_r1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/piesec5_3_r" />
+
+    <ImageView
+        android:id="@+id/piesec5_4_r1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/piesec5_4_r" />
+
+    <ImageView
+        android:id="@+id/piesec6_2_r1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/piesec6_2_r" />
+
+    <ImageView
+        android:id="@+id/piesec6_3_r1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/piesec6_3_r" />
+
+    <ImageView
+        android:id="@+id/piesec6_4_r1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/piesec6_4_r" />
+ 
+    <ImageView
+        android:id="@+id/piesec7_2_r1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/piesec7_2_r" />
+
+    <ImageView
+        android:id="@+id/piesec7_3_r1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/piesec7_3_r" />
+
+    <ImageView
+        android:id="@+id/piesec7_4_r1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/piesec7_4_r" />
+
+    <ImageView
+        android:id="@+id/piesec8_2_r1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/piesec8_2_r" />
+
+    <ImageView
+        android:id="@+id/piesec8_3_r1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/piesec8_3_r" />
+
+    <ImageView
+        android:id="@+id/piesec8_4_r1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/piesec8_4_r" /> 
+	
+	<ImageView
+        android:id="@+id/piesec1_1_r1"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/piesec1_1" />
+	
+	<ImageView
+        android:id="@+id/piesec2_1_r1"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/piesec2_1" />
+    
+    <ImageView
+        android:id="@+id/piesec3_1_r1"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/piesec3_1" />    
+	
+    <ImageView
+        android:id="@+id/piesec4_1_r1"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/piesec4_1" />
+    
+    <ImageView
+        android:id="@+id/piesec5_1_r1"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/piesec5_1" />
+
+    <ImageView
+        android:id="@+id/piesec6_1_r1"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/piesec6_1" />
+
+    <ImageView
+        android:id="@+id/piesec7_1_r1"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/piesec7_1" />
+
+    <ImageView
+        android:id="@+id/piesec8_1_r1"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/piesec8_1" />
+
+	<!-- Skill name label for each pie section -->
+	  
+    <TextView
+        android:id="@+id/skill_name1_m"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="110dp"
+        android:layout_marginLeft="170dp"
+        android:background="#99CCFF"
+        android:maxEms="5"
+        android:maxLines="2"
+        android:text="skill_name1" />
+    
+    <TextView
+        android:id="@+id/skill_name2_m"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="170dp"
+        android:layout_marginLeft="220dp"
+        android:background="#99CCFF"
+        android:maxEms="5"
+        android:maxLines="2"
+        android:text="skill_name2" />
+    
+    <TextView
+        android:id="@+id/skill_name3_m"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="250dp"
+        android:layout_marginLeft="220dp"
+        android:background="#99CCFF"
+        android:maxEms="5"
+        android:maxLines="2"
+        android:text="skill_name3" />
+    
+    <TextView
+        android:id="@+id/skill_name4_m"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="330dp"
+        android:layout_marginLeft="170dp"
+        android:background="#99CCFF"
+        android:maxEms="5"
+        android:maxLines="2"
+        android:text="skill_name4" />
+    
+    <TextView
+        android:id="@+id/skill_name5_m"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="330dp"
+        android:layout_marginLeft="70dp"
+        android:background="#99CCFF"
+        android:maxEms="5"
+        android:maxLines="2"
+        android:text="skill_name5" />
+    
+    <TextView
+        android:id="@+id/skill_name6_m"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="250dp"
+        android:layout_marginLeft="25dp"
+        android:background="#99CCFF"
+        android:maxEms="5"
+        android:maxLines="2"
+        android:text="skill_name6" />
+    
+    <TextView
+        android:id="@+id/skill_name7_m"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="170dp"
+        android:layout_marginLeft="25dp"
+        android:background="#99CCFF"
+        android:maxEms="5"
+        android:maxLines="2"
+        android:text="skill_name7" />
+    
+    <TextView
+        android:id="@+id/skill_name8_m"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="110dp"
+        android:layout_marginLeft="70dp"
+        android:background="#99CCFF"
+        android:maxEms="5"
+        android:maxLines="2"
+        android:text="skill_name8" />
+     
+    
+    <!-- Buttons to show/hide labels -->
+    
+    <Button
+        android:id="@+id/button_hide_m"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_blue"
+        android:text="@string/button_text_hide"
+        android:layout_gravity="bottom|left"
+        style="@style/button_text_style" />
+    
+</FrameLayout>
